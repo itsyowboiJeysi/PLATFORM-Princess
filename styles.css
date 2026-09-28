@@ -986,8 +986,8 @@ img, svg, video, canvas, audio, iframe, pre {
 
 .terminal-body {
   padding: var(--space-4);
-  min-height: 180px;
-  max-height: 300px;
+  min-height: 220px;
+  max-height: 380px;
   overflow-y: auto;
   font-family: var(--font-family-stack);
   font-size: var(--font-size-md);
@@ -1327,6 +1327,25 @@ img, svg, video, canvas, audio, iframe, pre {
   .window-titlebar {
     font-size: var(--font-size-xs);
   }
+
+  /* Make CLI prominent on tablets and medium screens */
+  .terminal-window {
+    border: 3px solid var(--color-surface-raised);
+    box-shadow: 0 0 20px rgba(255, 202, 45, 0.25), var(--shadow-1);
+  }
+
+  .terminal-titlebar {
+    padding: 8px 12px;
+    font-size: var(--font-size-sm);
+  }
+
+  .terminal-body {
+    min-height: 350px;
+    max-height: 480px;
+    font-size: 19px;
+    line-height: 1.45;
+    padding: 16px;
+  }
 }
 
 /* Phablets & Compact Touch Screens */
@@ -1365,25 +1384,92 @@ img, svg, video, canvas, audio, iframe, pre {
     white-space: normal;
   }
 
+  /* CLI Terminal enlarged for mobile screens */
+  .terminal-window {
+    border: 3px solid var(--color-surface-raised);
+    box-shadow: 0 0 22px rgba(255, 202, 45, 0.3), var(--shadow-1);
+  }
+
+  .terminal-titlebar {
+    padding: 10px 14px;
+    font-size: 16px;
+  }
+
+  .terminal-brand {
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .terminal-body {
+    min-height: 380px;
+    max-height: 520px;
+    height: 54vh;
+    font-size: clamp(17px, 4.4vw, 20px);
+    line-height: 1.45;
+    padding: 14px 16px;
+  }
+
+  .terminal-line {
+    margin-bottom: 6px;
+  }
+
+  .game-banner {
+    font-size: 1.05em;
+  }
+
+  .game-hud-line {
+    font-size: 1em;
+    padding: 6px 0;
+    margin: 8px 0;
+  }
+
+  .game-prompt-choice {
+    font-size: 1em;
+    padding-left: 8px;
+    margin: 4px 0;
+  }
+
   .terminal-input-row {
-    flex-wrap: wrap;
-    padding: var(--space-2) var(--space-3);
-    gap: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 14px;
+    gap: 8px;
+    background-color: #121212;
+    border-top: 2px solid var(--color-surface-raised);
   }
 
   .terminal-prompt {
-    font-size: var(--font-size-sm);
+    font-size: 17px;
+    font-weight: bold;
+    color: var(--color-surface-raised);
+    display: block;
+    width: 100%;
   }
 
   .terminal-input {
-    min-width: 140px;
-    font-size: var(--font-size-sm);
+    width: 100%;
+    font-size: 19px;
+    padding: 10px 12px;
+    background: #000000;
+    border: 2px solid #333333;
+    color: #ffffff;
+  }
+
+  .terminal-input:focus {
+    border-color: var(--color-surface-raised);
+    outline: none;
   }
 
   .terminal-submit-btn {
     width: 100%;
+    font-size: 19px;
+    padding: 12px 16px;
+    font-weight: bold;
     text-align: center;
-    margin-top: 2px;
+    margin-top: 4px;
+    border: 2px solid #000000;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.8);
   }
 
   .checklist-body div[style*="justify-content: space-between"] {
@@ -1477,11 +1563,94 @@ img, svg, video, canvas, audio, iframe, pre {
     padding: var(--space-2);
   }
 
+  .terminal-window {
+    border: 3px solid var(--color-surface-raised);
+    box-shadow: 0 0 25px rgba(255, 202, 45, 0.35), var(--shadow-1);
+    margin-left: -4px;
+    margin-right: -4px;
+  }
+
+  .terminal-titlebar {
+    padding: 10px 14px;
+    font-size: 16px;
+  }
+
+  .terminal-brand {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+
   .terminal-body {
-    font-size: var(--font-size-sm);
-    padding: var(--space-3);
-    min-height: 160px;
-    max-height: 260px;
+    font-size: clamp(17px, 4.6vw, 20px);
+    line-height: 1.45;
+    padding: 14px 16px;
+    min-height: 400px;
+    height: 58vh;
+    max-height: 560px;
+  }
+
+  .terminal-line {
+    margin-bottom: 6px;
+    font-size: inherit;
+  }
+
+  .game-banner {
+    font-size: 1.05em;
+  }
+
+  .game-hud-line {
+    font-size: 1em;
+    padding: 6px 0;
+    margin: 8px 0;
+  }
+
+  .game-prompt-choice {
+    font-size: 1em;
+    padding-left: 8px;
+    margin: 4px 0;
+  }
+
+  .terminal-input-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 14px;
+    gap: 8px;
+    background-color: #121212;
+    border-top: 2px solid var(--color-surface-raised);
+  }
+
+  .terminal-prompt {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-surface-raised);
+    display: block;
+    width: 100%;
+  }
+
+  .terminal-input {
+    width: 100%;
+    font-size: 19px;
+    padding: 10px 12px;
+    background: #000000;
+    border: 2px solid #333333;
+    color: #ffffff;
+  }
+
+  .terminal-input:focus {
+    border-color: var(--color-surface-raised);
+    outline: none;
+  }
+
+  .terminal-submit-btn {
+    width: 100%;
+    font-size: 19px;
+    padding: 12px 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 4px;
+    border: 2px solid #000000;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.8);
   }
 
   .crt-boot-box {
@@ -1566,12 +1735,26 @@ img, svg, video, canvas, audio, iframe, pre {
     font-size: 13px;
   }
 
+  .terminal-body {
+    font-size: 17px;
+    line-height: 1.4;
+    padding: 10px 12px;
+    min-height: 360px;
+    max-height: 500px;
+  }
+
   .terminal-prompt {
-    font-size: 12px;
+    font-size: 15px;
   }
 
   .terminal-input {
-    font-size: 12px;
+    font-size: 17px;
+    padding: 8px 10px;
+  }
+
+  .terminal-submit-btn {
+    font-size: 18px;
+    padding: 10px 14px;
   }
 }
 
