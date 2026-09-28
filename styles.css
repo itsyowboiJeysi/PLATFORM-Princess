@@ -899,6 +899,69 @@ body {
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.terminal-titlebar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.btn-play-game {
+  background-color: #000000;
+  color: var(--color-surface-raised);
+  border: 1px solid #000000;
+  font-family: var(--font-family-stack);
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  padding: 2px var(--space-2);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all var(--motion-duration-instant) ease;
+}
+
+.btn-play-game:hover {
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+/* CLI Game Styling */
+.game-banner {
+  color: var(--color-surface-raised);
+  font-weight: bold;
+  white-space: pre-wrap;
+}
+
+.game-hud-line {
+  color: #38bdf8;
+  border-top: 1px dashed #333333;
+  border-bottom: 1px dashed #333333;
+  padding: 4px 0;
+  margin: 6px 0;
+  font-weight: bold;
+}
+
+.game-alert-line {
+  color: #f87171;
+  font-weight: bold;
+}
+
+.game-success-line {
+  color: #4ade80;
+  font-weight: bold;
+}
+
+.game-prompt-choice {
+  color: #e2e8f0;
+  padding-left: var(--space-2);
+}
+
+.game-hint-line {
+  color: #facc15;
+  font-style: italic;
 }
 
 .terminal-body {

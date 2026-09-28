@@ -299,14 +299,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* -------------------------------------------------------------------------
-     5. RETRO PLATFORM SECURITY CLI TERMINAL
+     5. RETRO PLATFORM SECURITY CLI TERMINAL & PLATFORM DEFENDER GAME
      ------------------------------------------------------------------------- */
   const terminalForm = document.querySelector("#terminalForm");
   const terminalInput = document.querySelector("#terminalInput");
   const terminalOutput = document.querySelector("#terminalOutput");
+  const btnPlayGame = document.querySelector("#btnPlayGame");
 
   const terminalKnowledge = {
-    help: "SECURITY TOOLKIT COMMAND LIST:\n- 'tpm'        : Hardware Root of Trust & Secure Boot (Slides 8-16)\n- 'uefi'       : Unified Extensible Firmware Interface & Pre-Boot (Slide 11)\n- 'hypervisor' : Type 1 Bare-Metal vs Type 2 Hosted (Slide 21)\n- 'mobile'     : Mobile Sandboxing & Permissions vs Desktop (Slide 3)\n- 'cloud'      : Cloud Infrastructure & Shared Responsibility Model (Slide 4)\n- 'ethics'     : Administrative Ethics & Tenant Confidentiality (Slide 4, 31)\n- 'escape'     : Virtual Machine Escape Mechanics (Slide 26)\n- 'hyperjacking': Blue Pill Hypervisor Takeover (Slide 25)\n- 'snapshots'  : Rollback Vulnerabilities & Mitigation (Slide 30)\n- 'layers'     : 4 Computing Platform Layers & Threat Vectors (Slides 2, 5)\n- 'toolkit'    : Interactive Security Toolkit Suite Overview\n- 'threatlab'  : Virtualization Threat Lab Matrix\n- 'checklist'  : Best Practices for Virtualization Hardening (Slide 31)\n- 'status'     : Live Platform Security Posture Status\n- 'clear'      : Wipe console buffer",
+    game: "LAUNCHING PLATFORM DEFENDER: INCIDENT RESPONSE PROTOCOL...",
+    play: "LAUNCHING PLATFORM DEFENDER: INCIDENT RESPONSE PROTOCOL...",
+    help: "SECURITY TOOLKIT COMMAND LIST:\n- 'game'       : [NEW] Play Platform Defender Interactive CLI Game!\n- 'tpm'        : Hardware Root of Trust & Secure Boot (Slides 8-16)\n- 'uefi'       : Unified Extensible Firmware Interface & Pre-Boot (Slide 11)\n- 'hypervisor' : Type 1 Bare-Metal vs Type 2 Hosted (Slide 21)\n- 'mobile'     : Mobile Sandboxing & Permissions vs Desktop (Slide 3)\n- 'cloud'      : Cloud Infrastructure & Shared Responsibility Model (Slide 4)\n- 'ethics'     : Administrative Ethics & Tenant Confidentiality (Slide 4, 31)\n- 'escape'     : Virtual Machine Escape Mechanics (Slide 26)\n- 'hyperjacking': Blue Pill Hypervisor Takeover (Slide 25)\n- 'snapshots'  : Rollback Vulnerabilities & Mitigation (Slide 30)\n- 'layers'     : 4 Computing Platform Layers & Threat Vectors (Slides 2, 5)\n- 'toolkit'    : Interactive Security Toolkit Suite Overview\n- 'threatlab'  : Virtualization Threat Lab Matrix\n- 'checklist'  : Best Practices for Virtualization Hardening (Slide 31)\n- 'status'     : Live Platform Security Posture Status\n- 'clear'      : Wipe console buffer",
     tpm: "TPM 2.0 (SLIDES 8-16):\n- Hardware crypto coprocessor independent of CPU & OS.\n- Root of Trust: securely seals keys, certs, passwords in silicon.\n- Measures boot hashes into PCR registers (Platform Configuration Registers).\n- Stops pre-boot firmware rootkits. Required for Windows 11.\n- Limitations: cannot stop post-boot OS malware; physical laboratory attacks possible.",
     uefi: "UEFI FIRMWARE (SLIDE 11):\n- Modern replacement for legacy 16-bit BIOS.\n- Executes at power-on to initialize CPU, RAM, and controllers before OS loading.\n- Acts as the bridge between hardware and operating system.\n- Foundation of Secure Boot and cryptographic Chain of Trust.\n- Threat: SMM (Ring -2) rootkits persist across full hard drive wipes.",
     hypervisor: "HYPERVISOR TYPES (SLIDE 21):\n- Type 1 (Bare-Metal): Runs directly on physical hardware (VMware ESXi, Hyper-V). High performance, minimal attack surface.\n- Type 2 (Hosted): Runs on top of a host OS (VirtualBox, Workstation). High risk: inherits all host OS flaws.",
@@ -317,12 +320,242 @@ document.addEventListener("DOMContentLoaded", () => {
     hyperjacking: "HYPERJACKING (SLIDE 25):\n- Attacker installs malicious hypervisor underneath the OS ('blue pill' attack) or seizes VMM.\n- Threat: Hypervisor has highest privilege; attacker invisibly controls all VMs.\n- Countermeasures: Regular hypervisor patches, strict MFA, role-based access control.",
     snapshots: "SNAPSHOT SECURITY (SLIDE 30):\n- Snapshots save state for recovery/testing.\n- Risks: Rollback revives old unpatched CVE vulnerabilities and invalid certificates; RAM images can leak plain-text keys.\n- Best Practices: Encrypt snapshots, control creation permissions, ALWAYS patch immediately after rollback.",
     layers: "COMPUTING PLATFORM LAYERS (SLIDES 2 & 5):\n1. Hardware: CPU, RAM, storage, TPM (Risk: Side-channel attacks, physical tampering)\n2. Firmware: BIOS/UEFI, SPI flash (Risk: BIOS/UEFI rootkits, pre-boot backdoors)\n3. Operating System: Kernel, drivers, ACLs (Risk: Privilege escalation, kernel exploits)\n4. Applications: User services, web/DB (Risk: Malware, unpatched software CVEs)",
-    toolkit: "SECURITY TOOLKIT FEATURES:\n1. 'Secure the Platform' Hardening Activity (Slide 31 checklist with live posture meter)\n2. Interactive CLI Terminal Platform Auditor\n3. Retro Modal Topic Deep-Dive Viewer\n4. Category Domain Filter Rail",
+    toolkit: "SECURITY TOOLKIT FEATURES:\n1. 'Secure the Platform' Hardening Activity (Slide 31 checklist with live posture meter)\n2. Interactive CLI Terminal Platform Auditor\n3. Retro Modal Topic Deep-Dive Viewer\n4. Category Domain Filter Rail\n5. Platform Defender CLI Threat Mitigation Game",
     threatlab: "THREAT LAB SIMULATION MATRIX (SLIDES 24-30):\n- Threat #01: Hyperjacking ('Blue Pill' Hypervisor Seizure)\n- Threat #02: VM Escape (Guest-to-Host Boundary Breach)\n- Threat #03: Admin Misconfigurations (Overcommit DoS, Flat VLANs)\n- Threat #04: Snapshot Rollbacks (Stale CVE Reintroduction & RAM Leaks)",
     checklist: "SLIDE 31 BEST PRACTICES:\n1. Keep hypervisor updated & patched\n2. Enforce strict access control & MFA\n3. Use security baselines (CIS, NIST SP 800-125)\n4. Monitor VM behavior with logs & alerts\n5. Encrypt VM images & storage\n6. Segment virtual networking using VLANs\n7. Encrypt and control snapshots\n8. Regularly patch and update after rollback",
     reboot: "REBOOTING PLATFORM_SHIELD SYSTEM ROM (INITIALIZING SILICON ROOT OF TRUST)...",
     status: "STATUS: TPM 2.0 ANCHORED. CHAIN OF TRUST ENFORCED. HYPERVISOR BOUNDARIES VERIFIED. ALL PLATFORM CONTROLS OPERATIONAL."
   };
+
+  /* -------------------------------------------------------------------------
+     PLATFORM DEFENDER GAME ENGINE (5 Attack Waves derived from Syllabus)
+     ------------------------------------------------------------------------- */
+  const defenderGame = {
+    active: false,
+    waveIndex: 0,
+    integrity: 100,
+    score: 0,
+    waves: [
+      {
+        waveNum: 1,
+        title: "PRE-BOOT FIRMWARE TAMPERING (SPI FLASH ROOTKIT)",
+        ref: "SLIDES 8-16: HARDWARE ROOT OF TRUST",
+        threat: "An unsigned rootkit binary is attempting to hijack the bootloader execution before the OS kernel initializes.",
+        options: [
+          "[1] tpm      : Enforce TPM 2.0 PCR attestation & UEFI Secure Boot signature checks",
+          "[2] antivirus: Run user-space desktop antivirus scanner",
+          "[3] ignore   : Allow bootloader to proceed without verification"
+        ],
+        validKeys: ["1", "tpm", "secureboot", "uefi", "pcr"],
+        success: "COUNTERMEASURE DEPLOYED! TPM 2.0 PCR attestation halted execution of unsigned bootkit binary. Chain of trust intact.",
+        failure: "BREACH! User-space antivirus cannot execute before the OS loads. The bootkit seized Ring -2 firmware control!",
+        hint: "Modern platform trust begins in silicon. TPM 2.0 seals keys and verifies bootloader hashes before software boots (Slide 12)."
+      },
+      {
+        waveNum: 2,
+        title: "VIRTUAL MACHINE ESCAPE (VMM BOUNDARY BREACH)",
+        ref: "SLIDE 26: VM ESCAPE CONTAINMENT",
+        threat: "A malicious tenant in Guest VM #2 is sending malformed packets through legacy virtual floppy controller emulation to access the host hypervisor memory.",
+        options: [
+          "[1] ram      : Allocate more physical RAM to the guest virtual machine",
+          "[2] prune    : Prune unused legacy virtual devices & enforce SELinux MAC isolation boundaries",
+          "[3] reboot   : Reboot the guest virtual machine"
+        ],
+        validKeys: ["2", "prune", "selinux", "isolate", "escape", "mac"],
+        success: "COUNTERMEASURE DEPLOYED! Unused virtual hardware pruned and mandatory access controls contained the guest breach.",
+        failure: "BREACH! Allocating RAM or rebooting didn't stop the exploit. Malicious guest broke out onto the bare-metal host!",
+        hint: "Slide 26 dictates disabling unused virtual hardware (floppy, sound, unused USB) to eliminate attack surfaces."
+      },
+      {
+        waveNum: 3,
+        title: "HYPERJACKING INTRUSION ('BLUE PILL' TAKEOVER)",
+        ref: "SLIDE 25: HYPERVISOR BOUNDARY DEFENSE",
+        threat: "An adversary compromised default console credentials and is attempting to inject a rootkit directly beneath the hypervisor layer (Ring -1).",
+        options: [
+          "[1] mfa      : Enforce strict MFA, isolate out-of-band management plane & apply hypervisor microcode patch",
+          "[2] firewall : Install desktop software firewall inside one guest VM",
+          "[3] bridge   : Delete the virtual network switch bridge"
+        ],
+        validKeys: ["1", "mfa", "patch", "hyperjack", "hyperjacking", "oob"],
+        success: "COUNTERMEASURE DEPLOYED! MFA prevented management plane takeover and hypervisor microcode patch neutralized exploit.",
+        failure: "BREACH! The hypervisor holds highest privilege. Guest firewalls cannot stop a Ring -1 hyperjacking attack!",
+        hint: "Slide 25 requires MFA, regular hypervisor patches, and isolated out-of-band management consoles."
+      },
+      {
+        waveNum: 4,
+        title: "STALE SNAPSHOT ROLLBACK (REVIVED CVEs & RAM EXPOSURE)",
+        ref: "SLIDE 30: SNAPSHOT SECURITY & DISASTER RECOVERY",
+        threat: "An automated recovery workflow rolled back a production VM to a 90-day-old snapshot, reviving deprecated SSL certificates and unpatched CVEs.",
+        options: [
+          "[1] ignore   : Leave the VM running because it restored cleanly",
+          "[2] rollback : Roll back to an even older snapshot from last year",
+          "[3] repatch  : Trigger immediate re-patch cycle, rotate revoked keys & enforce snapshot encryption at rest"
+        ],
+        validKeys: ["3", "repatch", "patch", "snapshot", "encrypt"],
+        success: "COUNTERMEASURE DEPLOYED! Immediate re-patch cycle applied and unencrypted volatile RAM dump purged.",
+        failure: "BREACH! Running an unpatched restored snapshot exposed known CVEs to automated internet scanners!",
+        hint: "Slide 30 mandates immediately patching and auditing systems after any snapshot rollback."
+      },
+      {
+        waveNum: 5,
+        title: "MULTI-TENANT PRIVACY & MOBILE SANDBOXING CHALLENGE",
+        ref: "SLIDES 3-4, 31: MOBILE & ADMINISTRATIVE ETHICS",
+        threat: "A rogue third-party app requests arbitrary memory scraping rights, while an engineer attempts to peek into multi-tenant VM memory.",
+        options: [
+          "[1] grant    : Grant broad system privileges to speed up data collection",
+          "[2] sandbox  : Enforce mobile UID app sandboxing & strict ethical admin confidentiality (zero tenant snooping)",
+          "[3] disable  : Disable runtime permission checks"
+        ],
+        validKeys: ["2", "sandbox", "ethics", "leastprivilege", "privacy", "uid"],
+        success: "COUNTERMEASURE DEPLOYED! UID app sandbox isolated the app; ethical admin policy blocked unauthorized tenant inspection.",
+        failure: "BREACH! Overly permissive rights violated multi-tenant confidentiality and tenant privacy!",
+        hint: "Slide 3 teaches mobile UID sandboxing; Slide 31 stresses ethical admin duty and zero-snooping."
+      }
+    ],
+
+    start() {
+      this.active = true;
+      this.waveIndex = 0;
+      this.integrity = 100;
+      this.score = 0;
+
+      terminalOutput.innerHTML = `
+        <div class="terminal-line game-banner">+========================================================================+</div>
+        <div class="terminal-line game-banner">| [!] ALERT: PLATFORM DEFENDER: INCIDENT RESPONSE PROTOCOL INITIALIZED   |</div>
+        <div class="terminal-line game-banner">| MISSION: DEFEND 5 ARCHITECTURAL BOUNDARIES AGAINST LIVE EXPLOITS       |</div>
+        <div class="terminal-line system-line">| CONTROLS: Type option number ('1', '2', '3'), keyword, 'hint', or 'quit' |</div>
+        <div class="terminal-line game-banner">+========================================================================+</div>
+      `;
+
+      this.renderCurrentWave();
+    },
+
+    getHealthBar() {
+      const bars = Math.max(0, Math.round(this.integrity / 10));
+      const filled = "█".repeat(bars);
+      const empty = "░".repeat(10 - bars);
+      return `[${filled}${empty}] ${this.integrity}%`;
+    },
+
+    renderCurrentWave() {
+      const current = this.waves[this.waveIndex];
+      const waveDiv = document.createElement("div");
+      waveDiv.innerHTML = `
+        <div class="terminal-line game-hud-line">&gt;&gt; WAVE [0${current.waveNum}/05] :: INTEGRITY: ${this.getHealthBar()} | SCORE: ${this.score} PTS</div>
+        <div class="terminal-line game-alert-line">THREAT: ${current.title}</div>
+        <div class="terminal-line system-line">SOURCE: ${current.ref}</div>
+        <div class="terminal-line">&gt; SITUATION: ${current.threat}</div>
+        <div class="terminal-line" style="margin-top: 4px; color: var(--color-surface-raised);">COUNTERMEASURE CHOICES:</div>
+        ${current.options.map(opt => `<div class="terminal-line game-prompt-choice">${opt}</div>`).join("")}
+        <div class="terminal-line system-line">Choose option ('1', '2', '3') or keyword (type 'hint' for course clue, 'quit' to exit):</div>
+      `;
+      terminalOutput.appendChild(waveDiv);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    },
+
+    handleInput(input) {
+      if (input === "quit" || input === "exit") {
+        this.active = false;
+        const quitDiv = document.createElement("div");
+        quitDiv.className = "terminal-line system-line";
+        quitDiv.innerText = "> [!] PLATFORM DEFENDER SESSION ABORTED. RETURNED TO AUDITOR CLI SHELL.";
+        terminalOutput.appendChild(quitDiv);
+        return;
+      }
+
+      if (input === "status") {
+        const statDiv = document.createElement("div");
+        statDiv.className = "terminal-line game-hud-line";
+        statDiv.innerText = `> STATUS: WAVE ${this.waveIndex + 1}/5 | INTEGRITY: ${this.getHealthBar()} | SCORE: ${this.score} PTS`;
+        terminalOutput.appendChild(statDiv);
+        return;
+      }
+
+      const current = this.waves[this.waveIndex];
+
+      if (input === "hint" || input === "help") {
+        const hintDiv = document.createElement("div");
+        hintDiv.className = "terminal-line game-hint-line";
+        hintDiv.innerText = `> [?] ADVICE // ${current.hint}`;
+        terminalOutput.appendChild(hintDiv);
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        return;
+      }
+
+      const isMatch = current.validKeys.some(k => input === k || input.includes(k));
+
+      if (isMatch) {
+        this.score += 200;
+        const successDiv = document.createElement("div");
+        successDiv.className = "terminal-line game-success-line";
+        successDiv.innerText = `> [+] ${current.success} (+200 PTS)`;
+        terminalOutput.appendChild(successDiv);
+
+        this.waveIndex++;
+        if (this.waveIndex >= this.waves.length) {
+          this.renderVictory();
+        } else {
+          this.renderCurrentWave();
+        }
+      } else {
+        this.integrity = Math.max(0, this.integrity - 25);
+        const failDiv = document.createElement("div");
+        failDiv.className = "terminal-line game-alert-line";
+        failDiv.innerText = `> [-] ${current.failure} (-25% INTEGRITY)`;
+        terminalOutput.appendChild(failDiv);
+
+        if (this.integrity <= 0) {
+          this.renderDefeat();
+        } else {
+          const retryDiv = document.createElement("div");
+          retryDiv.className = "terminal-line system-line";
+          retryDiv.innerText = `> INTEGRITY AT ${this.integrity}%. Review the choices and try another countermeasure (or type 'hint'):`;
+          terminalOutput.appendChild(retryDiv);
+        }
+      }
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    },
+
+    renderVictory() {
+      this.active = false;
+      const victDiv = document.createElement("div");
+      victDiv.innerHTML = `
+        <div class="terminal-line game-success-line">+========================================================================+</div>
+        <div class="terminal-line game-success-line">| *** ALL 5 CYBER THREAT WAVES SUCCESSFULLY NEUTRALIZED! ***              |</div>
+        <div class="terminal-line game-success-line">+========================================================================+</div>
+        <div class="terminal-line game-hud-line">FINAL SCORE : ${this.score} / 1000 PTS | FINAL INTEGRITY: ${this.getHealthBar()}</div>
+        <div class="terminal-line system-line">&gt; PLATFORM RANK  : [ S-RANK ] CHIEF PLATFORM DEFENDER</div>
+        <div class="terminal-line system-line">&gt; ACCREDITATION  : ITA 216 PLATFORM ARCHITECTURE & VIRTUALIZATION MASTER</div>
+        <div class="terminal-line">&gt; All platform layers (Hardware, Firmware, OS, Hypervisor, Cloud) secured!</div>
+        <div class="terminal-line game-banner">&gt; Type 'game' to play again, or 'help' to resume standard auditor mode.</div>
+      `;
+      terminalOutput.appendChild(victDiv);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    },
+
+    renderDefeat() {
+      this.active = false;
+      const defeatDiv = document.createElement("div");
+      defeatDiv.innerHTML = `
+        <div class="terminal-line game-alert-line">+========================================================================+</div>
+        <div class="terminal-line game-alert-line">| [X] CRITICAL DEFENSE FAILURE: PLATFORM INTEGRITY REACHED 0%            |</div>
+        <div class="terminal-line game-alert-line">+========================================================================+</div>
+        <div class="terminal-line system-line">&gt; The hypervisor and silicon roots were seized by pre-boot adversaries.</div>
+        <div class="terminal-line system-line">&gt; SCORE ACHIEVED: ${this.score} PTS</div>
+        <div class="terminal-line game-banner">&gt; Type 'game' to re-initialize defenses, or 'clear' to reset console.</div>
+      `;
+      terminalOutput.appendChild(defeatDiv);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+  };
+
+  // Click handler for [ ▶ PLAY_GAME ] titlebar button
+  if (btnPlayGame) {
+    btnPlayGame.addEventListener("click", () => {
+      defenderGame.start();
+      if (terminalInput) terminalInput.focus();
+    });
+  }
 
   if (terminalForm && terminalInput && terminalOutput) {
     terminalForm.addEventListener("submit", (e) => {
@@ -335,10 +568,27 @@ document.addEventListener("DOMContentLoaded", () => {
       userLine.innerHTML = `<span class="prompt-symbol">auditor@platform-shield:~$</span> ${escapeHTML(rawInput)}`;
       terminalOutput.appendChild(userLine);
 
+      // 1. If Game is currently active, route command to game handler
+      if (defenderGame.active) {
+        defenderGame.handleInput(rawInput);
+        terminalInput.value = "";
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        return;
+      }
+
+      // 2. If user requests to start the game
+      if (rawInput === "game" || rawInput === "play") {
+        defenderGame.start();
+        terminalInput.value = "";
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        return;
+      }
+
+      // 3. Normal Auditor CLI commands
       if (rawInput === "clear") {
         terminalOutput.innerHTML = `
-          <div class="terminal-line system-line">ITA 216 PLATFORM ARCHITECTURE AUDIT CONSOLE V3.0</div>
-          <div class="terminal-line system-line">TYPE 'help' FOR COMMAND LIST.</div>
+          <div class="terminal-line system-line">ITA 216 PLATFORM ARCHITECTURE AUDIT CONSOLE V3.5</div>
+          <div class="terminal-line system-line">TYPE 'game' TO PLAY PLATFORM DEFENDER, OR 'help' FOR COMMAND LIST.</div>
         `;
       } else {
         const responseLine = document.createElement("div");
@@ -349,7 +599,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(runBootSequence, 350);
           }
         } else {
-          responseLine.innerText = `> ERR 127: COMMAND '${rawInput}' NOT RECOGNIZED. TYPE 'help' FOR SECURITY TOPICS.`;
+          responseLine.innerText = `> ERR 127: COMMAND '${rawInput}' NOT RECOGNIZED. TYPE 'game' TO PLAY, OR 'help' FOR TOPICS.`;
         }
         terminalOutput.appendChild(responseLine);
       }

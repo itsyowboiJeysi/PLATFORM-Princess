@@ -663,18 +663,21 @@
         <div class="terminal-window">
           <div class="terminal-titlebar">
             <span class="terminal-brand">[ CLI_SHELL: ITA_216_PLATFORM_AUDITOR // SECURITY_TOOLKIT ]</span>
-            <span class="terminal-window-buttons">[_] [O] [X]</span>
+            <div class="terminal-titlebar-right">
+              <button type="button" class="btn-play-game" id="btnPlayGame" aria-label="Launch Platform Defender Game">[ &#x25B6; PLAY_GAME ]</button>
+              <span class="terminal-window-buttons">[_] [O] [X]</span>
+            </div>
           </div>
           <div class="terminal-body" id="terminalOutput" role="log" aria-live="polite">
             <div class="terminal-line system-line">ITA 216 PLATFORM ARCHITECTURE SECURITY TOOLKIT V3.5</div>
             <div class="terminal-line system-line">SOURCE: SLIDES 3 - PLATFORM ARCHITECTURE (31 SLIDES ANALYZED)</div>
-            <div class="terminal-line system-line">COMMANDS: 'help', 'tpm', 'uefi', 'hypervisor', 'mobile', 'cloud', 'ethics', 'escape', 'hyperjacking', 'snapshots', 'toolkit', 'threatlab', 'checklist', 'status', 'clear'</div>
+            <div class="terminal-line system-line">COMMANDS: 'game', 'help', 'tpm', 'uefi', 'hypervisor', 'mobile', 'cloud', 'ethics', 'escape', 'hyperjacking', 'snapshots', 'toolkit', 'threatlab', 'checklist', 'status', 'clear'</div>
             <div class="terminal-line"><span class="prompt-symbol">auditor@platform-shield:~$</span> status</div>
             <div class="terminal-line response-line">&gt; PLATFORM STATUS: TPM 2.0 HARDWARE ROOT VERIFIED. CHAIN OF TRUST ENFORCED. HYPERVISOR BOUNDARIES SECURE.</div>
           </div>
           <form class="terminal-input-row" id="terminalForm">
             <label for="terminalInput" class="terminal-prompt">auditor@platform-shield:~$</label>
-            <input type="text" id="terminalInput" class="terminal-input" autocomplete="off" spellcheck="false" placeholder="Type 'help', 'mobile', 'cloud', 'ethics', 'tpm'..." aria-label="Terminal command input" />
+            <input type="text" id="terminalInput" class="terminal-input" autocomplete="off" spellcheck="false" placeholder="Type 'game' to play, or 'help', 'status', 'tpm'..." aria-label="Terminal command input" />
             <button type="submit" class="btn btn-primary btn-sm terminal-submit-btn">[ EXECUTE ]</button>
           </form>
         </div>
