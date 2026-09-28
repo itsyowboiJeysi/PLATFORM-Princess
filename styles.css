@@ -1002,10 +1002,14 @@ body {
 
 .terminal-line {
   margin-bottom: var(--space-1);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .system-line {
   color: var(--color-text-tertiary);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .prompt-symbol {
@@ -1014,6 +1018,8 @@ body {
 
 .response-line {
   color: #22c55e;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .terminal-input-row {
