@@ -248,10 +248,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* -------------------------------------------------------------------------
-     4. CATEGORY FILTER RAIL
+     4. CATEGORY FILTER RAIL & SMOOTH REDIRECT
      ------------------------------------------------------------------------- */
   const filterButtons = document.querySelectorAll(".filter-tag-btn");
   const projectCards = document.querySelectorAll(".project-card");
+  const architectureSection = document.querySelector("#architecture");
+  const architectureSubtitle = document.querySelector("#architectureSubtitle");
+
+  const filterFeedback = {
+    all: "Displaying all platform architecture modules & security tips (Slides 1-31).",
+    hardware: "Showing Hardware Root of Trust & TPM 2.0 modules (Slides 8-16).",
+    virtualization: "Showing Virtualization Architecture & Type-1 VMM isolation tips (Slide 21).",
+    "cloud-mobile": "Showing Mobile Platform Sandboxing & Cloud Shared Responsibility tips (Slides 3-4).",
+    ethics: "Showing Platform Administration Ethics & Responsible Disclosure (Slides 4, 31)."
+  };
 
   filterButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -263,10 +273,28 @@ document.addEventListener("DOMContentLoaded", () => {
       projectCards.forEach((card) => {
         if (filter === "all" || card.dataset.category === filter) {
           card.style.display = "flex";
+          card.classList.remove("filter-matched");
+          void card.offsetWidth;
+          card.classList.add("filter-matched");
         } else {
           card.style.display = "none";
+          card.classList.remove("filter-matched");
         }
       });
+
+      if (architectureSubtitle && filterFeedback[filter]) {
+        architectureSubtitle.textContent = filterFeedback[filter];
+      }
+
+      // Smoothly redirect and scroll user directly to the filtered section
+      if (architectureSection) {
+        const topbarHeight = 75;
+        const targetTop = architectureSection.getBoundingClientRect().top + window.pageYOffset - topbarHeight;
+        window.scrollTo({
+          top: targetTop,
+          behavior: "smooth"
+        });
+      }
     });
   });
 
