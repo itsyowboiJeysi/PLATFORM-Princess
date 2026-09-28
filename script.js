@@ -1415,6 +1415,10 @@ document.addEventListener("DOMContentLoaded", () => {
         waveNum: idx + 1
       }));
 
+      // Clear CLI completely and reset scroll
+      terminalOutput.innerHTML = "";
+      terminalOutput.scrollTop = 0;
+
       terminalOutput.innerHTML = `
         <div class="terminal-line game-banner">+========================================================================+</div>
         <div class="terminal-line game-banner">| [!] ALERT: PLATFORM DEFENDER: INCIDENT RESPONSE PROTOCOL INITIALIZED   |</div>
@@ -1424,6 +1428,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       this.renderCurrentWave();
+      terminalOutput.scrollTop = 0;
     },
 
     getHealthBar() {
@@ -1553,22 +1558,21 @@ document.addEventListener("DOMContentLoaded", () => {
       const rawInput = terminalInput.value.trim().toLowerCase();
       if (!rawInput) return;
 
+      // 1. If user requests to start/restart the game, clear CLI completely and launch fresh
+      if (rawInput === "game" || rawInput === "play") {
+        terminalInput.value = "";
+        defenderGame.start();
+        return;
+      }
+
       const userLine = document.createElement("div");
       userLine.className = "terminal-line";
       userLine.innerHTML = `<span class="prompt-symbol">auditor@platform-shield:~$</span> ${escapeHTML(rawInput)}`;
       terminalOutput.appendChild(userLine);
 
-      // 1. If Game is currently active, route command to game handler
+      // 2. If Game is currently active, route command to game handler
       if (defenderGame.active) {
         defenderGame.handleInput(rawInput);
-        terminalInput.value = "";
-        terminalOutput.scrollTop = terminalOutput.scrollHeight;
-        return;
-      }
-
-      // 2. If user requests to start the game
-      if (rawInput === "game" || rawInput === "play") {
-        defenderGame.start();
         terminalInput.value = "";
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
         return;
