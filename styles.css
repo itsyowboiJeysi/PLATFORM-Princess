@@ -1102,6 +1102,195 @@ body {
 }
 
 /* ==========================================================================
+   RETRO CRT BIOS BOOT SEQUENCE & SCREEN ANIMATIONS
+   ========================================================================== */
+.crt-boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: #000000;
+  color: var(--color-surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: crtTurnOn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  overflow: hidden;
+}
+
+.crt-boot-screen.hidden {
+  display: none !important;
+}
+
+.crt-boot-screen.fade-out {
+  animation: crtTurnOff 0.35s ease-in forwards;
+  pointer-events: none;
+}
+
+.crt-boot-box {
+  width: 100%;
+  max-width: 680px;
+  background-color: #0d0d0d;
+  border: 3px solid var(--color-surface-raised);
+  box-shadow: 0 0 30px rgba(255, 202, 45, 0.3), var(--shadow-1);
+  padding: var(--space-5);
+  font-family: var(--font-family-stack);
+  position: relative;
+  z-index: 2;
+}
+
+.crt-boot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--color-surface-raised);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-md);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.crt-boot-skip-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-surface-muted);
+  opacity: 0.8;
+  animation: retroPulse 1s infinite steps(2);
+}
+
+.crt-boot-terminal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  font-size: var(--font-size-sm);
+  color: var(--color-surface-muted);
+  line-height: 1.5;
+}
+
+.boot-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: bootLineFade 0.25s steps(3) both;
+}
+
+.boot-line:nth-child(1) { animation-delay: 0.05s; }
+.boot-line:nth-child(2) { animation-delay: 0.2s; }
+.boot-line:nth-child(3) { animation-delay: 0.4s; }
+.boot-line:nth-child(4) { animation-delay: 0.6s; }
+.boot-line:nth-child(5) { animation-delay: 0.8s; }
+
+.boot-ok {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.crt-boot-progress-wrap {
+  width: 100%;
+  height: 14px;
+  background-color: #111111;
+  border: 2px solid var(--color-surface-raised);
+  margin-bottom: var(--space-2);
+  padding: 1px;
+}
+
+.crt-boot-progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--color-surface-raised);
+  transition: width 0.12s linear;
+}
+
+.crt-boot-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+@keyframes crtTurnOn {
+  0% {
+    transform: scaleY(0.005) scaleX(0);
+    filter: brightness(25);
+    opacity: 0;
+  }
+  40% {
+    transform: scaleY(0.005) scaleX(1);
+    filter: brightness(15);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1);
+    opacity: 1;
+  }
+}
+
+@keyframes crtTurnOff {
+  0% {
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.005) scaleX(1);
+    filter: brightness(15);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scaleY(0.005) scaleX(0);
+    filter: brightness(30);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes bootLineFade {
+  0% { opacity: 0; transform: translateX(-4px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Staggered 8-bit Card Entrance */
+.stat-card, .project-card, .devlog-card {
+  animation: retroCardReveal 0.4s steps(4) both;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.18s; }
+.stat-card:nth-child(3) { animation-delay: 0.26s; }
+.stat-card:nth-child(4) { animation-delay: 0.34s; }
+
+@keyframes retroCardReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scanline Sweep Animation for CRT Overlays */
+.crt-scanline-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 202, 45, 0.06), transparent);
+  animation: scanlineSweep 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanlineSweep {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(800px); }
+}
+
+/* ==========================================================================
    ACCESSIBILITY: PREFERS-REDUCED-MOTION (WCAG 2.2 AA)
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {

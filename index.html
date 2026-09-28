@@ -13,6 +13,31 @@
 <body>
 
   <!-- ========================================================================
+       RETRO CRT BIOS BOOT SEQUENCE (Intro Animation on Page Load)
+       ======================================================================== -->
+  <aside class="crt-boot-screen" id="crtBootScreen" role="status" aria-label="System Initializing">
+    <div class="crt-boot-box">
+      <div class="crt-boot-header">
+        <span>&gt;&gt; ITA_216 PLATFORM_SHIELD ROM BIOS v3.2</span>
+        <span class="crt-boot-skip-hint">[CLICK OR PRESS ANY KEY TO SKIP]</span>
+      </div>
+      <div class="crt-boot-terminal" id="bootLogContent">
+        <div class="boot-line">&gt; INITIALIZING SILICON ROOT OF TRUST (TPM 2.0)... <span class="boot-ok">[OK]</span></div>
+        <div class="boot-line">&gt; VERIFYING CRYPTOGRAPHIC BOOTLOADER HASH DIGEST... <span class="boot-ok">[VERIFIED]</span></div>
+        <div class="boot-line">&gt; CHECKING HARDWARE VIRTUALIZATION EXTENSIONS (VT-x / AMD-V)... <span class="boot-ok">[ACTIVE]</span></div>
+        <div class="boot-line">&gt; ENFORCING CONTINUOUS CHAIN OF TRUST (UEFI SECURE BOOT)... <span class="boot-ok">[LOCKED]</span></div>
+        <div class="boot-line">&gt; LOADING 24 ARCHITECTURAL DEFENSE MODULES... <span class="boot-ok">[READY]</span></div>
+      </div>
+      <div class="crt-boot-progress-wrap">
+        <div class="crt-boot-progress-bar" id="bootProgressBar"></div>
+      </div>
+      <div class="crt-boot-footer">
+        <span id="bootPercentText">LOADING: 0%</span>
+        <span>MEMORY: 640K PLATFORM SPACE</span>
+      </div>
+    </div>
+    <div class="crt-scanline-overlay"></div>
+  </aside>
        1. NAVIGATION COMPONENT 01: GLOBAL TOP BAR (TopBarNav)
        ======================================================================== -->
   <header class="topbar-nav" role="banner">
@@ -695,6 +720,11 @@
         <div class="footer-status-pill">
           <span class="status-pulse-dot"></span>
           <span>ALL PLATFORM CONTROLS ENFORCED</span>
+        </div>
+        <div style="margin-top: var(--space-2); margin-bottom: var(--space-2);">
+          <button class="btn btn-secondary btn-sm" id="btnRebootSys" aria-label="Replay Retro CRT Boot Sequence">
+            [ &#x21BA; REPLAY_BOOT_SEQUENCE ]
+          </button>
         </div>
         <span class="copyright-line">COURSE ITA 216 · PLATFORM ARCHITECTURE &amp; SECURITY · 2026</span>
       </div>

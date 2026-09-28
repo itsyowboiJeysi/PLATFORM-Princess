@@ -292,6 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toolkit: "SECURITY TOOLKIT FEATURES:\n1. 'Secure the Platform' Hardening Activity (Slide 31 checklist with live posture meter)\n2. Interactive CLI Terminal Platform Auditor\n3. Retro Modal Topic Deep-Dive Viewer\n4. Category Domain Filter Rail",
     threatlab: "THREAT LAB SIMULATION MATRIX (SLIDES 24-30):\n- Threat #01: Hyperjacking ('Blue Pill' Hypervisor Seizure)\n- Threat #02: VM Escape (Guest-to-Host Boundary Breach)\n- Threat #03: Admin Misconfigurations (Overcommit DoS, Flat VLANs)\n- Threat #04: Snapshot Rollbacks (Stale CVE Reintroduction & RAM Leaks)",
     checklist: "SLIDE 31 BEST PRACTICES:\n1. Keep hypervisor updated & patched\n2. Enforce strict access control & MFA\n3. Use security baselines (CIS, NIST SP 800-125)\n4. Monitor VM behavior with logs & alerts\n5. Encrypt VM images & storage\n6. Segment virtual networking using VLANs\n7. Encrypt and control snapshots\n8. Regularly patch and update after rollback",
+    reboot: "REBOOTING PLATFORM_SHIELD SYSTEM ROM (INITIALIZING SILICON ROOT OF TRUST)...",
     status: "STATUS: TPM 2.0 ANCHORED. CHAIN OF TRUST ENFORCED. HYPERVISOR BOUNDARIES VERIFIED. ALL PLATFORM CONTROLS OPERATIONAL."
   };
 
@@ -316,6 +317,9 @@ document.addEventListener("DOMContentLoaded", () => {
         responseLine.className = "terminal-line response-line";
         if (terminalKnowledge[rawInput]) {
           responseLine.innerText = `> ${terminalKnowledge[rawInput]}`;
+          if (rawInput === "reboot") {
+            setTimeout(runBootSequence, 350);
+          }
         } else {
           responseLine.innerText = `> ERR 127: COMMAND '${rawInput}' NOT RECOGNIZED. TYPE 'help' FOR SECURITY TOPICS.`;
         }
@@ -356,6 +360,68 @@ document.addEventListener("DOMContentLoaded", () => {
         mobileMenuBtn.setAttribute("aria-expanded", "false");
         mobileMenuBtn.textContent = "[MENU]";
       });
+    });
+  }
+
+  /* -------------------------------------------------------------------------
+     7. RETRO CRT BIOS BOOT SEQUENCE
+     ------------------------------------------------------------------------- */
+  const bootScreen = document.querySelector("#crtBootScreen");
+  const bootProgressBar = document.querySelector("#bootProgressBar");
+  const bootPercentText = document.querySelector("#bootPercentText");
+  const btnReboot = document.querySelector("#btnRebootSys");
+
+  function runBootSequence() {
+    if (!bootScreen) return;
+    bootScreen.classList.remove("fade-out", "hidden");
+    document.body.style.overflow = "hidden";
+    if (bootProgressBar) bootProgressBar.style.width = "0%";
+    if (bootPercentText) bootPercentText.textContent = "LOADING: 0%";
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 12) + 14;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        setTimeout(dismissBootScreen, 260);
+      }
+      if (bootProgressBar) bootProgressBar.style.width = `${progress}%`;
+      if (bootPercentText) bootPercentText.textContent = `LOADING: ${progress}%`;
+    }, 110);
+
+    function dismissBootScreen() {
+      clearInterval(interval);
+      bootScreen.classList.add("fade-out");
+      document.body.style.overflow = "";
+      setTimeout(() => {
+        bootScreen.classList.add("hidden");
+      }, 380);
+      window.removeEventListener("keydown", handleKeySkip);
+      bootScreen.removeEventListener("click", handleClickSkip);
+    }
+
+    function handleKeySkip(e) {
+      if (e.key === "Escape" || e.key === " " || e.key === "Enter") {
+        dismissBootScreen();
+      }
+    }
+
+    function handleClickSkip() {
+      dismissBootScreen();
+    }
+
+    window.addEventListener("keydown", handleKeySkip, { once: true });
+    bootScreen.addEventListener("click", handleClickSkip, { once: true });
+  }
+
+  // Trigger boot sequence on page load
+  runBootSequence();
+
+  if (btnReboot) {
+    btnReboot.addEventListener("click", (e) => {
+      e.preventDefault();
+      runBootSequence();
     });
   }
 });
