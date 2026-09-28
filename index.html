@@ -304,12 +304,10 @@
               <div class="project-stack-tags">
                 <span class="stack-tag">ROOT_OF_TRUST</span>
                 <span class="stack-tag">SHA-256</span>
-                <span class="stack-tag">WINDOWS_11_REQ</span>
+                <span class="stack-tag">TPM_2.0</span>
               </div>
               <div class="project-card-actions">
-                <!-- Links 08 & 09 -->
                 <a href="#architecture" class="link-action topic-trigger" data-topic="TPM 2.0 Specifications">[ EXAMINE TPM SPEC ]</a>
-                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="TPM 1.2 vs 2.0 Comparison">[ 1.2 VS 2.0 EVOLUTION ]</a>
               </div>
             </div>
           </article>
@@ -339,14 +337,12 @@
                 If a bootloader or kernel hash mismatch occurs, execution immediately halts to block pre-boot rootkits.
               </p>
               <div class="project-stack-tags">
-                <span class="stack-tag">UEFI_SECURE_BOOT</span>
-                <span class="stack-tag">PCR_ATTESTATION</span>
-                <span class="stack-tag">ANTI-BOOTKIT</span>
+                <span class="stack-tag">SECURE_BOOT</span>
+                <span class="stack-tag">PCR_ATTEST</span>
+                <span class="stack-tag">ANTI_BOOTKIT</span>
               </div>
               <div class="project-card-actions">
-                <!-- Links 10 & 11 -->
                 <a href="#architecture" class="link-action topic-trigger" data-topic="Chain of Trust Pipeline">[ VERIFY BOOT STEPS ]</a>
-                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="02 Firmware (UEFI)">[ UEFI BRIDGE RULES ]</a>
               </div>
             </div>
           </article>
@@ -377,13 +373,11 @@
               </p>
               <div class="project-stack-tags">
                 <span class="stack-tag">BARE_METAL</span>
-                <span class="stack-tag">MINIMAL_ATTACK_SURFACE</span>
+                <span class="stack-tag">TYPE_1_VMM</span>
                 <span class="stack-tag">VM_ISOLATION</span>
               </div>
               <div class="project-card-actions">
-                <!-- Links 12 & 13 -->
-                <a href="#threats" class="link-action topic-trigger" data-topic="VM Isolation Techniques">[ VM ISOLATION ]</a>
-                <a href="#threats" class="link-action link-subdued topic-trigger" data-topic="Secure VM Networking">[ SECURE VM NETWORKING ]</a>
+                <a href="#threats" class="link-action topic-trigger" data-topic="VM Isolation Techniques">[ EXAMINE VM ISOLATION ]</a>
               </div>
             </div>
           </article>
@@ -412,13 +406,12 @@
                 Mobile platforms (Android/iOS) utilize tight hardware-software integration and mandatory app sandboxing. Each app executes within an isolated UID container with explicit runtime permissions, minimizing the attack surface compared to desktop OSes.
               </p>
               <div class="project-stack-tags">
-                <span class="stack-tag">APP_SANDBOXING</span>
+                <span class="stack-tag">APP_SANDBOX</span>
                 <span class="stack-tag">ANDROID_IOS</span>
                 <span class="stack-tag">LEAST_PRIVILEGE</span>
               </div>
               <div class="project-card-actions">
                 <a href="#architecture" class="link-action topic-trigger" data-topic="Mobile Platform Security">[ EXAMINE MOBILE SANDBOX ]</a>
-                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="Mobile vs Desktop Comparison">[ MOBILE VS DESKTOP ]</a>
               </div>
             </div>
           </article>
@@ -447,13 +440,12 @@
                 Cloud platforms abstract physical resources to offer on-demand scalable services (AWS, Azure). Virtualization is the core enabling technology, while security relies on the Shared Responsibility Model: providers secure the infrastructure, while tenants secure workloads and configurations.
               </p>
               <div class="project-stack-tags">
-                <span class="stack-tag">SHARED_RESPONSIBILITY</span>
-                <span class="stack-tag">AWS_AZURE_IAAS</span>
-                <span class="stack-tag">CLOUD_GOVERNANCE</span>
+                <span class="stack-tag">SHARED_RESP</span>
+                <span class="stack-tag">AWS_AZURE</span>
+                <span class="stack-tag">CLOUD_GOV</span>
               </div>
               <div class="project-card-actions">
                 <a href="#architecture" class="link-action topic-trigger" data-topic="Cloud &amp; Shared Responsibility Model">[ CLOUD MODEL RULES ]</a>
-                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="Virtualization vs Cloud Difference">[ VIRT VS CLOUD ]</a>
               </div>
             </div>
           </article>
@@ -483,12 +475,11 @@
               </p>
               <div class="project-stack-tags">
                 <span class="stack-tag">TENANT_PRIVACY</span>
-                <span class="stack-tag">RESPONSIBLE_DISCLOSURE</span>
                 <span class="stack-tag">ETHICAL_ADMIN</span>
+                <span class="stack-tag">DISCLOSURE</span>
               </div>
               <div class="project-card-actions">
-                <a href="#architecture" class="link-action topic-trigger" data-topic="Platform Security Ethics">[ ETHICAL DUTIES ]</a>
-                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="Administrative Trust Baselines">[ TRUST BASELINES ]</a>
+                <a href="#architecture" class="link-action topic-trigger" data-topic="Platform Security Ethics">[ ETHICAL ADMIN DUTIES ]</a>
               </div>
             </div>
           </article>
