@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Platform Security Tips & Architecture Guide based on Slides 3 - Platform Architecture. Course ITA 216. Hardware Root of Trust, TPM 2.0, UEFI Secure Boot, Hypervisors, VM Escape, and CIS/NIST Hardening." />
+  <title>Platform Security Tips | ITA 216 Platform Architecture Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. NAVIGATION COMPONENT 01: GLOBAL TOP BAR (TopBarNav)
+       ======================================================================== -->
+  <header class="topbar-nav" role="banner">
+    <div class="topbar-inner">
+      <a href="#hero" class="brand-logo" aria-label="Platform Security Guide Home">
+        <span class="brand-glyph">[#]</span>
+        <span class="brand-text">PLATFORM_SHIELD</span>
+      </a>
+
+      <div class="system-status-ticker" aria-live="polite">
+        <span class="status-pulse-dot" aria-hidden="true"></span>
+        <span class="ticker-label">SEC_STATUS: ENFORCED</span>
+        <span class="ticker-divider">|</span>
+        <span class="ticker-meta">TPM 2.0 ACTIVE</span>
+      </div>
+
+      <!-- Links 01-04 -->
+      <nav class="nav-links" id="desktopNavLinks" aria-label="Main Navigation">
+        <a href="#telemetry" class="nav-link" id="navLinkStats">[01_METRICS]</a>
+        <a href="#architecture" class="nav-link" id="navLinkArch">[02_ARCH]</a>
+        <a href="#threats" class="nav-link" id="navLinkThreats">[03_THREATS]</a>
+        <a href="#toolkit" class="nav-link" id="navLinkCli">[04_TOOLKIT]</a>
+      </nav>
+
+      <div class="nav-action-wrap">
+        <!-- Button 01 -->
+        <button class="btn btn-secondary btn-nav" id="btnDownloadChecklist" aria-label="Quick Platform Security Audit">
+          [ SECURE_PLATFORM ]
+        </button>
+        <button class="mobile-toggle-btn" id="mobileMenuBtn" aria-label="Toggle Mobile Navigation" aria-expanded="false" aria-controls="desktopNavLinks">
+          [MENU]
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       2. NAVIGATION COMPONENT 02: CATEGORY RAIL & BREADCRUMBS (SubCategoryNav)
+       ======================================================================== -->
+  <nav class="subcategory-nav" aria-label="Breadcrumbs and Security Domain Filters">
+    <div class="subcategory-inner">
+      <!-- Links 05-07 (Breadcrumbs) -->
+      <div class="breadcrumb-trail" aria-label="Breadcrumb">
+        <a href="#hero" class="breadcrumb-link">ITA_216</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="#architecture" class="breadcrumb-link">SLIDES_03</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="#threats" class="breadcrumb-link current-crumb" aria-current="page">PLATFORM_SECURITY_TIPS</a>
+      </div>
+
+      <!-- Buttons 02-06 (Filter Tags) -->
+      <div class="category-filter-tags" role="toolbar" aria-label="Security Tip Filters">
+        <button class="filter-tag-btn active" data-filter="all" id="btnFilterAll">
+          [ ALL_TIPS (24) ]
+        </button>
+        <button class="filter-tag-btn" data-filter="hardware" id="btnFilterHardware">
+          [ HARDWARE_&amp;_TPM ]
+        </button>
+        <button class="filter-tag-btn" data-filter="virtualization" id="btnFilterVirt">
+          [ VIRTUALIZATION ]
+        </button>
+        <button class="filter-tag-btn" data-filter="cloud-mobile" id="btnFilterCloudMobile">
+          [ CLOUD_&amp;_MOBILE ]
+        </button>
+        <button class="filter-tag-btn" data-filter="ethics" id="btnFilterEthics">
+          [ ETHICS_&amp;_GOV ]
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="mainContent">
+
+    <!-- ========================================================================
+         HERO SECTION: 8-BIT TERMINAL PLATFORM SECURITY GUIDE
+         ======================================================================== -->
+    <section class="hero-section" id="hero">
+      <div class="section-container">
+        <div class="hero-grid">
+          <div class="hero-copy-pane">
+            <div class="hero-badge">
+              <span class="badge-text">&gt;&gt; COURSE ITA 216: PLATFORM ARCHITECTURE</span>
+            </div>
+            <h1 class="hero-title">PLATFORM SECURITY TIPS<br><span class="highlight-accent">ARCHITECTURAL DEFENSE GUIDE</span></h1>
+            <p class="hero-description">
+              Definitive system security principles derived from <em>Slides 3 - Platform Architecture</em>.
+              Master hardware Root of Trust, TPM 2.0 PCR attestation, UEFI Secure Boot pipelines, 
+              hypervisor boundary protection, and snapshot rollback mitigation.
+            </p>
+
+            <div class="hero-actions">
+              <!-- Button 05 (Primary Button) -->
+              <a href="#architecture" class="btn btn-primary" id="btnHeroPrimary">
+                [ EXPLORE SECURITY TIPS ]
+              </a>
+              <!-- Button 06 (Secondary Button) -->
+              <a href="#toolkit" class="btn btn-secondary" id="btnHeroSecondary">
+                [ LAUNCH SECURITY TOOLKIT ]
+              </a>
+            </div>
+
+            <div class="hero-spec-ticker">
+              <span class="spec-cell">SOURCE: SLIDES 3 (31 PAGES)</span>
+              <span class="spec-cell">STANDARD: ISO/IEC 11889 TPM 2.0</span>
+              <span class="spec-cell">BASELINES: CIS &amp; NIST SP 800-125</span>
+            </div>
+          </div>
+
+          <!-- Retro 8-Bit Cartridge / Frame -->
+          <div class="hero-visual-pane">
+            <div class="retro-window-box">
+              <div class="window-titlebar">
+                <span class="titlebar-label">CARTRIDGE_01: CHAIN_OF_TRUST</span>
+                <span class="titlebar-controls">[_] [X]</span>
+              </div>
+              <div class="window-canvas">
+                <div class="pixel-art-grid">
+                  <pre class="ascii-art-hero" aria-label="ASCII Chain of Trust Architecture">
++-----------------------------------+
+| [01: TPM ROOT OF TRUST (SILICON)] |
+|               | (Verify Digest)   |
+|               v                   |
+| [02: UEFI FIRMWARE (SECURE BOOT)] |
+|               | (Check Signature) |
+|               v                   |
+| [03: BOOTLOADER -> KERNEL RING 0] |
+|               | (Hardware VMM)    |
+|               v                   |
+| [04: TYPE-1 HYPERVISOR ISOLATION] |
++-----------------------------------+
+                  </pre>
+                  <div class="crt-scanline-overlay" aria-hidden="true"></div>
+                </div>
+                <div class="canvas-caption">
+                  <span class="caption-chip">IMMUTABLE ROOT ANCHOR</span>
+                  <span class="caption-date">SLIDES 3 // P. 12</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 1: SCOREBOARD / STAT CARDS (Cards 01-04)
+         Derived from PDF Pages 2, 20, 24, 31
+         ======================================================================== -->
+    <section class="dashboard-section" id="telemetry">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-kicker">&gt;&gt; SECTION 01 // TELEMETRY &amp; ARCHITECTURE</span>
+          <h2 class="section-title">// PLATFORM_ARCHITECTURE_SCOREBOARD</h2>
+          <p class="section-subtitle">Key platform architectural boundaries, hypervisor paradigms, and threat vectors from the course syllabus.</p>
+        </div>
+
+        <div class="stats-card-grid">
+          <!-- Card 01 -->
+          <article class="stat-card" id="statCardLayers">
+            <div class="card-window-bar">
+              <span class="window-bar-text">METRIC_01 // SLIDE 2</span>
+              <span class="window-bar-btns">[-] [x]</span>
+            </div>
+            <div class="stat-card-body">
+              <span class="stat-label">PLATFORM_LAYERS</span>
+              <strong class="stat-value">04</strong>
+              <div class="stat-delta">
+                <span class="delta-arrow">■</span>
+                <span class="delta-text">HARDWARE -> FIRMWARE -> OS -> APPLICATIONS</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 02 -->
+          <article class="stat-card" id="statCardHypervisors">
+            <div class="card-window-bar">
+              <span class="window-bar-text">METRIC_02 // SLIDE 21</span>
+              <span class="window-bar-btns">[-] [x]</span>
+            </div>
+            <div class="stat-card-body">
+              <span class="stat-label">HYPERVISOR_TYPES</span>
+              <strong class="stat-value">02</strong>
+              <div class="stat-delta">
+                <span class="delta-arrow">▲</span>
+                <span class="delta-text">TYPE 1 (BARE-METAL) &amp; TYPE 2 (HOSTED)</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 03 -->
+          <article class="stat-card" id="statCardRisks">
+            <div class="card-window-bar">
+              <span class="window-bar-text">METRIC_03 // SLIDE 24</span>
+              <span class="window-bar-btns">[-] [x]</span>
+            </div>
+            <div class="stat-card-body">
+              <span class="stat-label">VIRT_THREAT_VECTORS</span>
+              <strong class="stat-value">04</strong>
+              <div class="stat-delta">
+                <span class="delta-arrow">▼</span>
+                <span class="delta-text">HYPERJACKING · ESCAPE · CONFIG · SNAPSHOT</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 04 -->
+          <article class="stat-card" id="statCardPractices">
+            <div class="card-window-bar">
+              <span class="window-bar-text">METRIC_04 // SLIDE 31</span>
+              <span class="window-bar-btns">[-] [x]</span>
+            </div>
+            <div class="stat-card-body">
+              <span class="stat-label">HARDENED_CONTROLS</span>
+              <strong class="stat-value">08</strong>
+              <div class="stat-delta">
+                <span class="delta-arrow">▲</span>
+                <span class="delta-text">CIS BENCHMARKS &amp; NIST SP 800-125</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 2: HARDWARE-BASED TRUST & ARCHITECTURAL TIPS (Cards 05-07, Links 08-13)
+         Derived from PDF Pages 8, 9, 11, 12, 13, 14, 15, 16, 21
+         ======================================================================== -->
+    <section class="dashboard-section surface-contrast-section" id="architecture">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-kicker">&gt;&gt; SECTION 02 // HARDWARE &amp; FIRMWARE SECURITY TIPS</span>
+          <h2 class="section-title">// SILICON_ROOT_OF_TRUST &amp; SECURE_BOOT</h2>
+          <p class="section-subtitle">Why hardware-backed security is non-negotiable for modern computing platforms.</p>
+        </div>
+
+        <div class="projects-card-grid">
+          <!-- Card 05 (Tip Module 1) -->
+          <article class="project-card" data-category="hardware">
+            <div class="card-window-bar">
+              <span class="window-bar-text">TIP_MODULE // 01 · SLIDE 8-16</span>
+              <span class="window-status-pill">TPM 2.0</span>
+            </div>
+            <div class="project-card-media">
+              <div class="media-placeholder-grid">
+                <pre class="ascii-preview">
+[ HARDWARE TPM 2.0 CHIP ]
++=======================+
+| [KEYS] SEALED IN CHIP |
+| [PCRs] SHA-256 HASHES |
+| [AUTH] POLICY HIERARCH|
++=======================+
+                </pre>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <h3 class="project-title">TIP: STORE SECRETS IN SILICON, NOT OS RAM</h3>
+              <p class="project-desc">
+                TPM is an independent cryptographic coprocessor that provides a Root of Trust. 
+                It acts as a physical safe: keys, certificates, and passwords are never exposed to OS memory scraping or pre-boot malware.
+              </p>
+              <div class="project-stack-tags">
+                <span class="stack-tag">ROOT_OF_TRUST</span>
+                <span class="stack-tag">SHA-256</span>
+                <span class="stack-tag">WINDOWS_11_REQ</span>
+              </div>
+              <div class="project-card-actions">
+                <!-- Links 08 & 09 -->
+                <a href="#architecture" class="link-action topic-trigger" data-topic="TPM 2.0 Specifications">[ EXAMINE TPM SPEC ]</a>
+                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="TPM 1.2 vs 2.0 Comparison">[ 1.2 VS 2.0 EVOLUTION ]</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 06 (Tip Module 2) -->
+          <article class="project-card" data-category="hardware">
+            <div class="card-window-bar">
+              <span class="window-bar-text">TIP_MODULE // 02 · SLIDE 11-12</span>
+              <span class="window-status-pill">UEFI BOOT</span>
+            </div>
+            <div class="project-card-media">
+              <div class="media-placeholder-grid">
+                <pre class="ascii-preview">
+[ CHAIN OF TRUST ENGINE ]
++=======================+
+| ROM -> UEFI -> LOADER |
+| -> KERNEL -> APPS     |
+| [!] HALT ON MISMATCH  |
++=======================+
+                </pre>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <h3 class="project-title">TIP: ENFORCE CONTINUOUS CHAIN OF TRUST</h3>
+              <p class="project-desc">
+                Each execution stage must verify the cryptographic signature of the next before handing over machine control. 
+                If a bootloader or kernel hash mismatch occurs, execution immediately halts to block pre-boot rootkits.
+              </p>
+              <div class="project-stack-tags">
+                <span class="stack-tag">UEFI_SECURE_BOOT</span>
+                <span class="stack-tag">PCR_ATTESTATION</span>
+                <span class="stack-tag">ANTI-BOOTKIT</span>
+              </div>
+              <div class="project-card-actions">
+                <!-- Links 10 & 11 -->
+                <a href="#architecture" class="link-action topic-trigger" data-topic="Chain of Trust Pipeline">[ VERIFY BOOT STEPS ]</a>
+                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="02 Firmware (UEFI)">[ UEFI BRIDGE RULES ]</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 07 (Tip Module 3) -->
+          <article class="project-card" data-category="virtualization">
+            <div class="card-window-bar">
+              <span class="window-bar-text">TIP_MODULE // 03 · SLIDE 21</span>
+              <span class="window-status-pill">HYPERVISOR</span>
+            </div>
+            <div class="project-card-media">
+              <div class="media-placeholder-grid">
+                <pre class="ascii-preview">
+[ TYPE 1 BARE-METAL VMM ]
++=======================+
+| [VM 1] [VM 2] [VM 3]  |
+| TYPE 1 HYPERVISOR VMM |
+| PHYSICAL SERVER HDWR  |
++=======================+
+                </pre>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <h3 class="project-title">TIP: DEPLOY TYPE 1 FOR ENTERPRISE WORKLOADS</h3>
+              <p class="project-desc">
+                Type 1 (Bare-Metal: ESXi, Hyper-V, KVM) runs directly on hardware with a minimal attack surface and hardware-level VM isolation. 
+                Type 2 (Hosted: VirtualBox, Workstation) runs on a host OS, inheriting all vulnerabilities of the host operating system.
+              </p>
+              <div class="project-stack-tags">
+                <span class="stack-tag">BARE_METAL</span>
+                <span class="stack-tag">MINIMAL_ATTACK_SURFACE</span>
+                <span class="stack-tag">VM_ISOLATION</span>
+              </div>
+              <div class="project-card-actions">
+                <!-- Links 12 & 13 -->
+                <a href="#threats" class="link-action topic-trigger" data-topic="VM Isolation Techniques">[ VM ISOLATION ]</a>
+                <a href="#threats" class="link-action link-subdued topic-trigger" data-topic="Secure VM Networking">[ SECURE VM NETWORKING ]</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 08 (Tip Module 4 - Mobile Security) -->
+          <article class="project-card" data-category="cloud-mobile">
+            <div class="card-window-bar">
+              <span class="window-bar-text">TIP_MODULE // 04 · SLIDE 3</span>
+              <span class="window-status-pill">MOBILE PLATFORMS</span>
+            </div>
+            <div class="project-card-media">
+              <div class="media-placeholder-grid">
+                <pre class="ascii-preview">
+[ MOBILE SECURITY MODEL ]
++=======================+
+| [APP 1] [APP 2] [APP 3]|
+| SANDBOX ISOLATION PERM|
+| HARDWARE INTEGRATION  |
++=======================+
+                </pre>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <h3 class="project-title">TIP: ENFORCE APP SANDBOXING &amp; PERMISSION BOUNDS</h3>
+              <p class="project-desc">
+                Mobile platforms (Android/iOS) utilize tight hardware-software integration and mandatory app sandboxing. Each app executes within an isolated UID container with explicit runtime permissions, minimizing the attack surface compared to desktop OSes.
+              </p>
+              <div class="project-stack-tags">
+                <span class="stack-tag">APP_SANDBOXING</span>
+                <span class="stack-tag">ANDROID_IOS</span>
+                <span class="stack-tag">LEAST_PRIVILEGE</span>
+              </div>
+              <div class="project-card-actions">
+                <a href="#architecture" class="link-action topic-trigger" data-topic="Mobile Platform Security">[ EXAMINE MOBILE SANDBOX ]</a>
+                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="Mobile vs Desktop Comparison">[ MOBILE VS DESKTOP ]</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 09 (Tip Module 5 - Cloud Security) -->
+          <article class="project-card" data-category="cloud-mobile">
+            <div class="card-window-bar">
+              <span class="window-bar-text">TIP_MODULE // 05 · SLIDE 4</span>
+              <span class="window-status-pill">CLOUD PLATFORMS</span>
+            </div>
+            <div class="project-card-media">
+              <div class="media-placeholder-grid">
+                <pre class="ascii-preview">
+[ CLOUD ARCHITECTURE    ]
++=======================+
+| ON-DEMAND AWS / AZURE |
+| SHARED RESPONSIBILITY |
+| HYPERVISOR SUBSTRATE  |
++=======================+
+                </pre>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <h3 class="project-title">TIP: GOVERN CLOUD VIA SHARED RESPONSIBILITY</h3>
+              <p class="project-desc">
+                Cloud platforms abstract physical resources to offer on-demand scalable services (AWS, Azure). Virtualization is the core enabling technology, while security relies on the Shared Responsibility Model: providers secure the infrastructure, while tenants secure workloads and configurations.
+              </p>
+              <div class="project-stack-tags">
+                <span class="stack-tag">SHARED_RESPONSIBILITY</span>
+                <span class="stack-tag">AWS_AZURE_IAAS</span>
+                <span class="stack-tag">CLOUD_GOVERNANCE</span>
+              </div>
+              <div class="project-card-actions">
+                <a href="#architecture" class="link-action topic-trigger" data-topic="Cloud &amp; Shared Responsibility Model">[ CLOUD MODEL RULES ]</a>
+                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="Virtualization vs Cloud Difference">[ VIRT VS CLOUD ]</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 10 (Tip Module 6 - Security Ethics & Governance) -->
+          <article class="project-card" data-category="ethics">
+            <div class="card-window-bar">
+              <span class="window-bar-text">TIP_MODULE // 06 · SLIDE 4, 31</span>
+              <span class="window-status-pill">ETHICS &amp; GOV</span>
+            </div>
+            <div class="project-card-media">
+              <div class="media-placeholder-grid">
+                <pre class="ascii-preview">
+[ PLATFORM ETHICS CORE  ]
++=======================+
+| ZERO TENANT SNOOPING  |
+| RESPONSIBLE DISCLOSURE|
+| LEAST PRIVILEGE ADMIN |
++=======================+
+                </pre>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <h3 class="project-title">TIP: ENFORCE ETHICAL ADMIN &amp; TENANT PRIVACY</h3>
+              <p class="project-desc">
+                With hypervisor and Ring -1 privileges comes absolute operational responsibility. Ethical administration demands respecting multi-tenant confidentiality, prohibiting unauthorized memory inspection, enforcing MFA separation of duties, and practicing responsible disclosure.
+              </p>
+              <div class="project-stack-tags">
+                <span class="stack-tag">TENANT_PRIVACY</span>
+                <span class="stack-tag">RESPONSIBLE_DISCLOSURE</span>
+                <span class="stack-tag">ETHICAL_ADMIN</span>
+              </div>
+              <div class="project-card-actions">
+                <a href="#architecture" class="link-action topic-trigger" data-topic="Platform Security Ethics">[ ETHICAL DUTIES ]</a>
+                <a href="#architecture" class="link-action link-subdued topic-trigger" data-topic="Administrative Trust Baselines">[ TRUST BASELINES ]</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 3: THREAT LAB: VIRTUALIZATION RISKS & SIMULATION (Cards 11-14)
+         Derived from PDF Pages 24, 25, 26, 27, 28, 29, 30
+         ======================================================================== -->
+    <section class="dashboard-section" id="threats">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-kicker">&gt;&gt; SECTION 03 // THREAT LAB: SIMULATION &amp; DEFENSE</span>
+          <h2 class="section-title">// THREAT_LAB: VIRTUALIZATION_RISKS &amp; MITIGATION_TIPS</h2>
+          <p class="section-subtitle">Interactive threat lab simulating hyperjacking ("Blue Pill"), virtual machine escape, configuration weaknesses, and snapshot rollback risks from course Slides 24-30.</p>
+        </div>
+
+        <div class="devlogs-grid">
+          <!-- Card 11 (Threat Lab 1) -->
+          <article class="devlog-card">
+            <div class="card-window-bar">
+              <span class="window-bar-text">THREAT LAB #01 // SLIDE 25</span>
+              <span class="entry-date">CRITICAL_SEVERITY</span>
+            </div>
+            <div class="devlog-content">
+              <h3 class="devlog-title">
+                <!-- Link 14 -->
+                <a href="#threats" class="devlog-link topic-trigger" data-topic="Hyperjacking Mitigation">Hyperjacking Defense: Stop "Blue Pill" Hypervisor Takeovers</a>
+              </h3>
+              <p class="devlog-excerpt">
+                Hyperjacking occurs when an adversary installs a rogue hypervisor underneath an operating system or seizes the VMM layer. Because the hypervisor holds the highest privilege, attackers can monitor, manipulate, or exfiltrate all guest VMs invisibly.
+              </p>
+              <div class="devlog-footer">
+                <div class="devlog-tags">
+                  <span class="stack-tag">PATCH_HYPERVISOR</span>
+                  <span class="stack-tag">ENFORCE_MFA</span>
+                </div>
+                <!-- Button 07 -->
+                <button class="btn btn-secondary btn-sm read-log-btn topic-trigger" data-topic="Hyperjacking Mitigation">
+                  [ SIMULATE THREAT / READ DEFENSE ]
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 12 (Threat Lab 2) -->
+          <article class="devlog-card">
+            <div class="card-window-bar">
+              <span class="window-bar-text">THREAT LAB #02 // SLIDE 26</span>
+              <span class="entry-date">HIGH_SEVERITY</span>
+            </div>
+            <div class="devlog-content">
+              <h3 class="devlog-title">
+                <!-- Link 15 -->
+                <a href="#threats" class="devlog-link topic-trigger" data-topic="VM Escape Containment">Containing VM Escape: When Guest Code Attacks the Host</a>
+              </h3>
+              <p class="devlog-excerpt">
+                VM Escape violates the core promise of virtualization: isolation. Malicious code inside a guest VM exploits virtual device drivers or emulators to break boundary checks and execute directly on the physical host machine, compromising all co-located tenants.
+              </p>
+              <div class="devlog-footer">
+                <div class="devlog-tags">
+                  <span class="stack-tag">DEVICE_PRUNING</span>
+                  <span class="stack-tag">MAC_SELINUX</span>
+                </div>
+                <!-- Button 08 -->
+                <button class="btn btn-secondary btn-sm read-log-btn topic-trigger" data-topic="VM Escape Containment">
+                  [ SIMULATE ESCAPE / READ DEFENSE ]
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 13 (Threat Lab 3) -->
+          <article class="devlog-card">
+            <div class="card-window-bar">
+              <span class="window-bar-text">THREAT LAB #03 // SLIDE 27</span>
+              <span class="entry-date">CONFIG_VULNERABILITY</span>
+            </div>
+            <div class="devlog-content">
+              <h3 class="devlog-title">
+                <!-- Link 16 -->
+                <a href="#threats" class="devlog-link topic-trigger" data-topic="CIS Virtualization Baselines">Eliminating Risky Virtualization Misconfigurations</a>
+              </h3>
+              <p class="devlog-excerpt">
+                Most breaches stem from admin mistakes: unrestricted root/admin privileges in guest VMs, flat virtual networks without VLANs, default console credentials, and CPU/RAM overcommit that leads to Denial-of-Service (DoS) conditions.
+              </p>
+              <div class="devlog-footer">
+                <div class="devlog-tags">
+                  <span class="stack-tag">LEAST_PRIVILEGE</span>
+                  <span class="stack-tag">VLAN_802.1Q</span>
+                </div>
+                <!-- Button 09 -->
+                <button class="btn btn-secondary btn-sm read-log-btn topic-trigger" data-topic="CIS Virtualization Baselines">
+                  [ AUDIT MISCONFIG / READ DEFENSE ]
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 14 (Threat Lab 4) -->
+          <article class="devlog-card">
+            <div class="card-window-bar">
+              <span class="window-bar-text">THREAT LAB #04 // SLIDE 30</span>
+              <span class="entry-date">STATE_PERSISTENCE</span>
+            </div>
+            <div class="devlog-content">
+              <h3 class="devlog-title">
+                <!-- Link 17 -->
+                <a href="#threats" class="devlog-link topic-trigger" data-topic="Snapshot Security">Snapshot Rollback Security: A Recovery Point Can Be a Risk</a>
+              </h3>
+              <p class="devlog-excerpt">
+                Snapshots preserve full machine memory and disk state. Rolling back restores historical unpatched CVE vulnerabilities and invalid certificates. Unencrypted snapshots also expose plain-text keys and session tokens stored in RAM.
+              </p>
+              <div class="devlog-footer">
+                <div class="devlog-tags">
+                  <span class="stack-tag">ENCRYPT_SNAPSHOTS</span>
+                  <span class="stack-tag">IMMEDIATE_RE-PATCH</span>
+                </div>
+                <!-- Link used as action -->
+                <button class="btn btn-secondary btn-sm read-log-btn topic-trigger" data-topic="Snapshot Security">
+                  [ AUDIT SNAPSHOT / READ DEFENSE ]
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 4: SECURITY TOOLKIT: "SECURE THE PLATFORM" ACTIVITY & CLI TERMINAL
+         Derived from PDF Slide 4, 25, 27, 31 (Best Practices, Checklist, Audit Terminal)
+         ======================================================================== -->
+    <section class="dashboard-section terminal-section" id="toolkit">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-kicker">&gt;&gt; SECTION 04 // SECURITY TOOLKIT</span>
+          <h2 class="section-title">// "SECURE_THE_PLATFORM"_ACTIVITY &amp; CLI_AUDITOR</h2>
+          <p class="section-subtitle">Interactive security toolkit: Audit the 8 virtualization controls to harden the platform, and query the retro terminal auditor for live course telemetry.</p>
+        </div>
+
+        <!-- Interactive "Secure the Platform" Activity & 8-Point Defense Checklist from Slide 31 -->
+        <div class="checklist-panel retro-window-box" id="checklist-activity" style="margin-bottom: var(--space-6);">
+          <div class="window-titlebar">
+            <span class="titlebar-label">ACTIVITY: "SECURE_THE_PLATFORM" // HARDENING_CHECKLIST (SLIDE 31)</span>
+            <span class="titlebar-controls" id="checkProgressLabel">0 / 8 VERIFIED (0% HARDENED)</span>
+          </div>
+          <div class="checklist-body" style="padding: var(--space-4); background-color: var(--color-surface-muted); color: var(--color-text-primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2); flex-wrap: wrap; gap: var(--space-2);">
+              <span style="font-size: var(--font-size-sm); font-weight: bold;">PLATFORM DEFENSE INTEGRITY STATUS:</span>
+              <span id="postureStatusBadge" style="background: #dc2626; color: #ffffff; padding: 2px 8px; font-weight: bold; font-size: var(--font-size-xs);">VULNERABLE (0%)</span>
+            </div>
+            <div class="progress-bar-wrap" style="height: 10px; background: #e5e5e5; margin-bottom: var(--space-4); border: 2px solid #000;">
+              <div id="checkProgressBar" style="height: 100%; width: 0%; background: var(--color-surface-raised); transition: width 0.2s;"></div>
+            </div>
+
+            <div class="checklist-items-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-2);">
+              <label class="check-item"><input type="checkbox" class="sec-chk"> <span>1. Keep hypervisor updated &amp; patched (Slide 31)</span></label>
+              <label class="check-item"><input type="checkbox" class="sec-chk"> <span>2. Enforce strict access control &amp; MFA (Slide 25)</span></label>
+              <label class="check-item"><input type="checkbox" class="sec-chk"> <span>3. Apply CIS &amp; NIST SP 800-125 baselines (Slide 31)</span></label>
+              <label class="check-item"><input type="checkbox" class="sec-chk"> <span>4. Monitor VM telemetry with SIEM logs (Slide 31)</span></label>
+              <label class="check-item"><input type="checkbox" class="sec-chk"> <span>5. Encrypt VM images &amp; storage at rest (Slide 31)</span></label>
+              <label class="check-item"><input type="checkbox" class="sec-chk"> <span>6. Segment traffic with isolated VLANs (Slide 29)</span></label>
+              <label class="check-item"><input type="checkbox" class="sec-chk"> <span>7. Encrypt &amp; control snapshot creation (Slide 30)</span></label>
+              <label class="check-item"><input type="checkbox" class="sec-chk"> <span>8. Mandate immediate re-patch after rollback (Slide 30)</span></label>
+            </div>
+            
+            <div style="margin-top: var(--space-3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2);">
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-secondary btn-sm" id="btnResetChecklist">[ RESET ACTIVITY ]</button>
+                <button class="btn btn-primary btn-sm" id="btnAutoHarden">[ AUTO-HARDEN ALL ]</button>
+              </div>
+              <span style="font-size: var(--font-size-sm); color: var(--color-text-tertiary);">STANDARDS: CIS VIRTUALIZATION &amp; NIST SP 800-125</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLI Console Shell -->
+        <div class="terminal-window">
+          <div class="terminal-titlebar">
+            <span class="terminal-brand">[ CLI_SHELL: ITA_216_PLATFORM_AUDITOR // SECURITY_TOOLKIT ]</span>
+            <span class="terminal-window-buttons">[_] [O] [X]</span>
+          </div>
+          <div class="terminal-body" id="terminalOutput" role="log" aria-live="polite">
+            <div class="terminal-line system-line">ITA 216 PLATFORM ARCHITECTURE SECURITY TOOLKIT V3.5</div>
+            <div class="terminal-line system-line">SOURCE: SLIDES 3 - PLATFORM ARCHITECTURE (31 SLIDES ANALYZED)</div>
+            <div class="terminal-line system-line">COMMANDS: 'help', 'tpm', 'uefi', 'hypervisor', 'mobile', 'cloud', 'ethics', 'escape', 'hyperjacking', 'snapshots', 'toolkit', 'threatlab', 'checklist', 'status', 'clear'</div>
+            <div class="terminal-line"><span class="prompt-symbol">auditor@platform-shield:~$</span> status</div>
+            <div class="terminal-line response-line">&gt; PLATFORM STATUS: TPM 2.0 HARDWARE ROOT VERIFIED. CHAIN OF TRUST ENFORCED. HYPERVISOR BOUNDARIES SECURE.</div>
+          </div>
+          <form class="terminal-input-row" id="terminalForm">
+            <label for="terminalInput" class="terminal-prompt">auditor@platform-shield:~$</label>
+            <input type="text" id="terminalInput" class="terminal-input" autocomplete="off" spellcheck="false" placeholder="Type 'help', 'mobile', 'cloud', 'ethics', 'tpm'..." aria-label="Terminal command input" />
+            <button type="submit" class="btn btn-primary btn-sm terminal-submit-btn">[ EXECUTE ]</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       FOOTER COMPONENT (Links 18-19)
+       ======================================================================== -->
+  <footer class="pixel-footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-col-main">
+        <div class="footer-logo">
+          <span class="brand-glyph">[#]</span>
+          <strong>PLATFORM_SHIELD // ITA_216</strong>
+        </div>
+        <p class="footer-tagline">
+          Platform Security Tips &amp; Architecture Guide derived from <em>Slides 3 - Platform Architecture</em>.
+          Designed to token-driven retro UI standards and WCAG 2.2 AA accessibility requirements.
+        </p>
+      </div>
+
+      <div class="footer-col-links">
+        <span class="footer-col-heading">COURSE_REFERENCES</span>
+        <ul class="footer-links-list">
+          <!-- Links 18 & 19 -->
+          <li><a href="#hero" class="footer-meta-link" id="linkPrivacy">[ SLIDES_3_SOURCE_MANIFEST.PDF ]</a></li>
+          <li><a href="#architecture" class="footer-meta-link" id="linkRss">[ TCG_TPM_2.0_ISO_11889.XML ]</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col-right">
+        <span class="footer-col-heading">SECURITY_POSTURE</span>
+        <div class="footer-status-pill">
+          <span class="status-pulse-dot"></span>
+          <span>ALL PLATFORM CONTROLS ENFORCED</span>
+        </div>
+        <span class="copyright-line">COURSE ITA 216 · PLATFORM ARCHITECTURE &amp; SECURITY · 2026</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       RETRO MODAL DIALOG: SECURITY TIP EXPLANATION (Accessible Dialog)
+       ======================================================================== -->
+  <div class="retro-modal-backdrop" id="retroModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="retro-modal-box">
+      <div class="modal-titlebar">
+        <span class="modal-titlebar-title" id="modalTitleText">[ SECURITY_TIP_VIEWER: SLIDE_DETAILS ]</span>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal dialog">[X]</button>
+      </div>
+      <div class="modal-content" id="modalBodyText">
+        <div style="font-size: var(--font-size-xs); color: var(--color-surface-raised); margin-bottom: var(--space-1);" id="modalCategoryBadge">CATEGORY</div>
+        <h3 id="modalHeading" style="font-size: var(--font-size-xl); margin-bottom: var(--space-2);">Security Tip Title</h3>
+        <p id="modalDetail" style="margin-bottom: var(--space-3); line-height: 1.5;">Main explanation from slide material...</p>
+        
+        <div style="background: #f3f4f6; border: 1px solid #e5e5e5; padding: var(--space-2) var(--space-3); margin-bottom: var(--space-3);">
+          <strong style="display: block; font-size: var(--font-size-sm); color: #0a0a0a;">ARCHITECTURAL SIGNIFICANCE:</strong>
+          <span id="modalSignificance" style="font-size: var(--font-size-sm); color: #374151;">Significance...</span>
+        </div>
+
+        <div style="background: #fffbeb; border: 1px solid #fef3c7; padding: var(--space-2) var(--space-3);">
+          <strong style="display: block; font-size: var(--font-size-sm); color: #b45309;">RECOMMENDED SAFEGUARD:</strong>
+          <span id="modalSafeguard" style="font-size: var(--font-size-sm); color: #92400e;">Safeguard...</span>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modalDismissBtn">[ DISMISS ]</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
