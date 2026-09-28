@@ -937,6 +937,19 @@ body {
   font-style: italic;
 }
 
+.typing-cursor {
+  display: inline-block;
+  color: var(--color-surface-raised);
+  font-weight: bold;
+  margin-left: 2px;
+  animation: retroCursorBlink 0.5s infinite steps(2);
+}
+
+@keyframes retroCursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .terminal-body {
   padding: var(--space-4);
   min-height: 180px;

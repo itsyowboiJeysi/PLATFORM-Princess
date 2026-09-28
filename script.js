@@ -1395,6 +1395,60 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 ];
 
+  /* -------------------------------------------------------------------------
+     RETRO TERMINAL TYPEWRITER ENGINE
+     ------------------------------------------------------------------------- */
+  let activeTypingTimeouts = [];
+
+  function clearActiveTyping() {
+    activeTypingTimeouts.forEach((t) => clearTimeout(t));
+    activeTypingTimeouts = [];
+    document.querySelectorAll(".typing-cursor").forEach((c) => c.remove());
+  }
+
+  function typeText(element, text, speed = 6, onDone = null) {
+    let index = 0;
+    element.textContent = "";
+
+    const cursor = document.createElement("span");
+    cursor.className = "typing-cursor";
+    cursor.textContent = "█";
+    element.appendChild(cursor);
+
+    function nextChunk() {
+      if (index < text.length) {
+        const chunk = text.slice(index, index + 2);
+        index += 2;
+        cursor.before(document.createTextNode(chunk));
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        const timeoutId = setTimeout(nextChunk, speed);
+        activeTypingTimeouts.push(timeoutId);
+      } else {
+        cursor.remove();
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        if (onDone) onDone();
+      }
+    }
+
+    nextChunk();
+  }
+
+  async function typeSequentialLines(lines, onAllDone = null) {
+    for (const item of lines) {
+      await new Promise((resolve) => {
+        typeText(item.element, item.text, item.speed || 5, () => {
+          if (item.delayAfter) {
+            const timeoutId = setTimeout(resolve, item.delayAfter);
+            activeTypingTimeouts.push(timeoutId);
+          } else {
+            resolve();
+          }
+        });
+      });
+    }
+    if (onAllDone) onAllDone();
+  }
+
   const defenderGame = {
     active: false,
     waveIndex: 0,
@@ -1403,10 +1457,15 @@ document.addEventListener("DOMContentLoaded", () => {
     waves: [],
 
     start() {
+      clearActiveTyping();
       this.active = true;
       this.waveIndex = 0;
       this.integrity = 100;
       this.score = 0;
+
+      // Clear CLI completely and reset scroll
+      terminalOutput.innerHTML = "";
+      terminalOutput.scrollTop = 0;
 
       // Randomly pick 5 unique questions from the 50-question pool on every game session
       const shuffled = [...QUESTION_BANK].sort(() => 0.5 - Math.random());
@@ -1414,10 +1473,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ...q,
         waveNum: idx + 1
       }));
-
-      // Clear CLI completely and reset scroll
-      terminalOutput.innerHTML = "";
-      terminalOutput.scrollTop = 0;
 
       terminalOutput.innerHTML = `
         <div class="terminal-line game-banner">+========================================================================+</div>
@@ -1439,36 +1494,70 @@ document.addEventListener("DOMContentLoaded", () => {
     },
 
     renderCurrentWave() {
+      clearActiveTyping();
       const current = this.waves[this.waveIndex];
-      const waveDiv = document.createElement("div");
-      waveDiv.innerHTML = `
-        <div class="terminal-line game-hud-line">&gt;&gt; WAVE [0${current.waveNum}/05] :: INTEGRITY: ${this.getHealthBar()} | SCORE: ${this.score} PTS</div>
-        <div class="terminal-line game-alert-line">THREAT: ${current.title}</div>
-        <div class="terminal-line system-line">SOURCE: ${current.ref}</div>
-        <div class="terminal-line">&gt; SITUATION: ${current.threat}</div>
-        <div class="terminal-line" style="margin-top: 4px; color: var(--color-surface-raised);">COUNTERMEASURE CHOICES:</div>
-        ${current.options.map(opt => `<div class="terminal-line game-prompt-choice">${opt}</div>`).join("")}
-        <div class="terminal-line system-line">Choose option ('1', '2', '3') or keyword (type 'hint' for course clue, 'quit' to exit):</div>
-      `;
-      terminalOutput.appendChild(waveDiv);
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+
+      const hudDiv = document.createElement("div");
+      hudDiv.className = "terminal-line game-hud-line";
+      hudDiv.innerHTML = `&gt;&gt; WAVE [0${current.waveNum}/05] :: INTEGRITY: ${this.getHealthBar()} | SCORE: ${this.score} PTS`;
+      terminalOutput.appendChild(hudDiv);
+
+      const threatLine = document.createElement("div");
+      threatLine.className = "terminal-line game-alert-line";
+      terminalOutput.appendChild(threatLine);
+
+      const sourceLine = document.createElement("div");
+      sourceLine.className = "terminal-line system-line";
+      terminalOutput.appendChild(sourceLine);
+
+      const sitLine = document.createElement("div");
+      sitLine.className = "terminal-line";
+      terminalOutput.appendChild(sitLine);
+
+      const choicesTitle = document.createElement("div");
+      choicesTitle.className = "terminal-line";
+      choicesTitle.style.marginTop = "4px";
+      choicesTitle.style.color = "var(--color-surface-raised)";
+      choicesTitle.innerText = "COUNTERMEASURE CHOICES:";
+      terminalOutput.appendChild(choicesTitle);
+
+      const optLines = current.options.map((opt) => {
+        const optLine = document.createElement("div");
+        optLine.className = "terminal-line game-prompt-choice";
+        terminalOutput.appendChild(optLine);
+        return { element: optLine, text: opt, speed: 4 };
+      });
+
+      const promptLine = document.createElement("div");
+      promptLine.className = "terminal-line system-line";
+      promptLine.innerText = "Choose option ('1', '2', '3') or keyword (type 'hint' for course clue, 'quit' to exit):";
+      terminalOutput.appendChild(promptLine);
+
+      typeSequentialLines([
+        { element: threatLine, text: `THREAT: ${current.title}`, speed: 5 },
+        { element: sourceLine, text: `SOURCE: ${current.ref}`, speed: 5 },
+        { element: sitLine, text: `> SITUATION: ${current.threat}`, speed: 5, delayAfter: 20 },
+        ...optLines
+      ]);
     },
 
     handleInput(input) {
+      clearActiveTyping();
+
       if (input === "quit" || input === "exit") {
         this.active = false;
         const quitDiv = document.createElement("div");
         quitDiv.className = "terminal-line system-line";
-        quitDiv.innerText = "> [!] PLATFORM DEFENDER SESSION ABORTED. RETURNED TO AUDITOR CLI SHELL.";
         terminalOutput.appendChild(quitDiv);
+        typeText(quitDiv, "> [!] PLATFORM DEFENDER SESSION ABORTED. RETURNED TO AUDITOR CLI SHELL.", 5);
         return;
       }
 
       if (input === "status") {
         const statDiv = document.createElement("div");
         statDiv.className = "terminal-line game-hud-line";
-        statDiv.innerText = `> STATUS: WAVE ${this.waveIndex + 1}/5 | INTEGRITY: ${this.getHealthBar()} | SCORE: ${this.score} PTS`;
         terminalOutput.appendChild(statDiv);
+        typeText(statDiv, `> STATUS: WAVE ${this.waveIndex + 1}/5 | INTEGRITY: ${this.getHealthBar()} | SCORE: ${this.score} PTS`, 5);
         return;
       }
 
@@ -1477,44 +1566,44 @@ document.addEventListener("DOMContentLoaded", () => {
       if (input === "hint" || input === "help") {
         const hintDiv = document.createElement("div");
         hintDiv.className = "terminal-line game-hint-line";
-        hintDiv.innerText = `> [?] ADVICE // ${current.hint}`;
         terminalOutput.appendChild(hintDiv);
-        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        typeText(hintDiv, `> [?] ADVICE // ${current.hint}`, 5);
         return;
       }
 
-      const isMatch = current.validKeys.some(k => input === k || input.includes(k));
+      const isMatch = current.validKeys.some((k) => input === k || input.includes(k));
 
       if (isMatch) {
         this.score += 200;
         const successDiv = document.createElement("div");
         successDiv.className = "terminal-line game-success-line";
-        successDiv.innerText = `> [+] ${current.success} (+200 PTS)`;
         terminalOutput.appendChild(successDiv);
 
-        this.waveIndex++;
-        if (this.waveIndex >= this.waves.length) {
-          this.renderVictory();
-        } else {
-          this.renderCurrentWave();
-        }
+        typeText(successDiv, `> [+] ${current.success} (+200 PTS)`, 4, () => {
+          this.waveIndex++;
+          if (this.waveIndex >= this.waves.length) {
+            this.renderVictory();
+          } else {
+            this.renderCurrentWave();
+          }
+        });
       } else {
         this.integrity = Math.max(0, this.integrity - 25);
         const failDiv = document.createElement("div");
         failDiv.className = "terminal-line game-alert-line";
-        failDiv.innerText = `> [-] ${current.failure} (-25% INTEGRITY)`;
         terminalOutput.appendChild(failDiv);
 
-        if (this.integrity <= 0) {
-          this.renderDefeat();
-        } else {
-          const retryDiv = document.createElement("div");
-          retryDiv.className = "terminal-line system-line";
-          retryDiv.innerText = `> INTEGRITY AT ${this.integrity}%. Review the choices and try another countermeasure (or type 'hint'):`;
-          terminalOutput.appendChild(retryDiv);
-        }
+        typeText(failDiv, `> [-] ${current.failure} (-25% INTEGRITY)`, 4, () => {
+          if (this.integrity <= 0) {
+            this.renderDefeat();
+          } else {
+            const retryDiv = document.createElement("div");
+            retryDiv.className = "terminal-line system-line";
+            terminalOutput.appendChild(retryDiv);
+            typeText(retryDiv, `> INTEGRITY AT ${this.integrity}%. Review the choices and try another countermeasure (or type 'hint'):`, 4);
+          }
+        });
       }
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
     },
 
     renderVictory() {
@@ -1550,13 +1639,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-
-
   if (terminalForm && terminalInput && terminalOutput) {
     terminalForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const rawInput = terminalInput.value.trim().toLowerCase();
       if (!rawInput) return;
+
+      clearActiveTyping();
 
       // 1. If user requests to start/restart the game, clear CLI completely and launch fresh
       if (rawInput === "game" || rawInput === "play") {
@@ -1587,15 +1676,17 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         const responseLine = document.createElement("div");
         responseLine.className = "terminal-line response-line";
-        if (terminalKnowledge[rawInput]) {
-          responseLine.innerText = `> ${terminalKnowledge[rawInput]}`;
-          if (rawInput === "reboot") {
-            setTimeout(runBootSequence, 350);
-          }
-        } else {
-          responseLine.innerText = `> ERR 127: COMMAND '${rawInput}' NOT RECOGNIZED. TYPE 'game' TO PLAY, OR 'help' FOR TOPICS.`;
-        }
         terminalOutput.appendChild(responseLine);
+
+        if (terminalKnowledge[rawInput]) {
+          typeText(responseLine, `> ${terminalKnowledge[rawInput]}`, 5, () => {
+            if (rawInput === "reboot") {
+              setTimeout(runBootSequence, 350);
+            }
+          });
+        } else {
+          typeText(responseLine, `> ERR 127: COMMAND '${rawInput}' NOT RECOGNIZED. TYPE 'game' TO PLAY, OR 'help' FOR TOPICS.`, 5);
+        }
       }
 
       terminalInput.value = "";
