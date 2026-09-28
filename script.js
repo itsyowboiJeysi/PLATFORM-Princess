@@ -424,4 +424,50 @@ document.addEventListener("DOMContentLoaded", () => {
       runBootSequence();
     });
   }
+
+  /* -------------------------------------------------------------------------
+     8. RETRO TYPEWRITER EFFECT FOR HIGHLIGHTED HERO TEXT
+     ------------------------------------------------------------------------- */
+  const typewriterTarget = document.querySelector("#typewriterTarget");
+  const typewriterPhrases = [
+    "ARCHITECTURAL DEFENSE GUIDE",
+    "SILICON ROOT OF TRUST (TPM)",
+    "CHAIN OF TRUST BOOT ENGINE",
+    "TYPE-1 HYPERVISOR ISOLATION",
+    "VIRTUALIZATION DEFENSE GUIDE"
+  ];
+
+  if (typewriterTarget && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let phraseIndex = 0;
+    let charIndex = typewriterPhrases[0].length;
+    let isDeleting = false;
+    let typeDelay = 2600;
+
+    function typeStep() {
+      const currentPhrase = typewriterPhrases[phraseIndex];
+
+      if (isDeleting) {
+        charIndex--;
+        typewriterTarget.textContent = currentPhrase.substring(0, charIndex);
+        typeDelay = 40;
+      } else {
+        charIndex++;
+        typewriterTarget.textContent = currentPhrase.substring(0, charIndex);
+        typeDelay = 75;
+      }
+
+      if (!isDeleting && charIndex === currentPhrase.length) {
+        isDeleting = true;
+        typeDelay = 2600;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % typewriterPhrases.length;
+        typeDelay = 450;
+      }
+
+      setTimeout(typeStep, typeDelay);
+    }
+
+    setTimeout(typeStep, typeDelay);
+  }
 });

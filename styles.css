@@ -396,10 +396,25 @@ body {
   color: var(--color-surface-muted);
   margin-bottom: var(--space-4);
   letter-spacing: 0.02em;
+  min-height: 2.2em;
 }
 
 .highlight-accent {
   color: var(--color-surface-raised);
+  text-shadow: 0 0 12px rgba(255, 202, 45, 0.35);
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  color: var(--color-surface-raised);
+  font-weight: bold;
+  animation: retroCursorBlink 0.75s infinite steps(1);
+  margin-left: 4px;
+}
+
+@keyframes retroCursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 .hero-description {
