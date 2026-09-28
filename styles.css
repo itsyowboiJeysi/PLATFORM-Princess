@@ -62,6 +62,35 @@
   border-radius: var(--radius-none) !important; /* Strict 0px radius enforcement */
 }
 
+/* Global Retro Scrollbar Architecture */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-surface-raised) #0a0a0a;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border-left: 1px solid #222222;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-raised);
+  border: 1px solid #000000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffe066;
+}
+
+::-webkit-scrollbar-corner {
+  background: #0a0a0a;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: var(--font-size-base);
@@ -881,6 +910,45 @@ body {
   font-size: var(--font-size-md);
   line-height: 1.4;
   background-color: #000000;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-surface-raised) #000000;
+}
+
+.terminal-body::-webkit-scrollbar {
+  width: 12px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+  background: #000000;
+  border-left: 2px solid #222222;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+  background: var(--color-surface-raised);
+  border: 1px solid #000000;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+  background: #ffe066;
+}
+
+.terminal-body::-webkit-scrollbar-button {
+  background-color: #111111;
+  border: 1px solid #222222;
+  height: 12px;
+  display: block;
+}
+
+.terminal-body::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpolygon points='4,1 1,6 7,6' fill='%23ffca2d'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.terminal-body::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpolygon points='4,7 1,2 7,2' fill='%23ffca2d'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .terminal-line {
