@@ -304,7 +304,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const terminalForm = document.querySelector("#terminalForm");
   const terminalInput = document.querySelector("#terminalInput");
   const terminalOutput = document.querySelector("#terminalOutput");
-  const btnPlayGame = document.querySelector("#btnPlayGame");
 
   const terminalKnowledge = {
     game: "LAUNCHING PLATFORM DEFENDER: INCIDENT RESPONSE PROTOCOL...",
@@ -549,13 +548,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Click handler for [ ▶ PLAY_GAME ] titlebar button
-  if (btnPlayGame) {
-    btnPlayGame.addEventListener("click", () => {
-      defenderGame.start();
-      if (terminalInput) terminalInput.focus();
-    });
-  }
+
 
   if (terminalForm && terminalInput && terminalOutput) {
     terminalForm.addEventListener("submit", (e) => {
